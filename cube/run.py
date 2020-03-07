@@ -5,7 +5,7 @@ from cube.gui import mainwindow
 
 from cube import paths
 
-if __name__ == '__main__':
+def main():
 
     app = QtWidgets.QApplication(sys.argv)
     # app.setStyleSheet(open('./etc/{0}.qss'.format('style'), "r").read())
@@ -13,3 +13,5 @@ if __name__ == '__main__':
     main.show()
 
     sys.exit(app.exec_())
+
+main()

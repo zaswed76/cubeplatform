@@ -17,7 +17,7 @@ setup(
                 join(dirname(__file__), 'README.rst')).read(),
         install_requires=["PyQt5", "pyaml"],
         entry_points={
-            'scripts':
+            'console_scripts':
                 ['cube = cube.run:main']
         }
 

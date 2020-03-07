@@ -1,5 +1,6 @@
 
-recursive-include notetub/etc *.yaml
-recursive-include notetub/css *.css
-recursive-include notetub/dictionaries *.txt
-recursive-include notetub/resource *.png
+
+recursive-include cube/css *.css
+recursive-include cube/resource/abc *.png
+recursive-include cube/resource/abc *.jpg
+recursive-include cube/settings/ *.yaml

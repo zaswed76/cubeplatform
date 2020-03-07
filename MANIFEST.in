@@ -4,3 +4,4 @@ recursive-include cube/css *.css
 recursive-include cube/resource/abc *.png
 recursive-include cube/resource/abc *.jpg
 recursive-include cube/settings *.yaml
+recursive-include cube/ *.qrc

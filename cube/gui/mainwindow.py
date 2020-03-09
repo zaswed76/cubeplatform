@@ -9,10 +9,10 @@ from cube import resources
 
 
 
-class MainWindow(QtWidgets.QWidget):
+class MainWindow(QtWidgets.QFrame):
     def __init__(self, config_pth, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        pass
+        self.setObjectName("center")
 
         self.cfg = Config(paths.MAIN_CONFIG)
 

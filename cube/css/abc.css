@@ -1,14 +1,14 @@
 QFrame#center_frame {
     /*background: red;*/
-    background-image: url("./resource/abc/bg.jpg");
+    background-image: url(".//resource/abc/bg.jpg");
 }
 
 QPushButton#close_btn {
-    border-image: url("./resource/abc/exit.png");
+    border-image: url(".//resource/abc/exit.png");
 
 }
 
 QPushButton#settings_btn {
-    border-image: url("./resource/abc/settings.png");
+    border-image: url(".//resource/abc/settings.png");
 
 }

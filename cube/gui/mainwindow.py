@@ -3,9 +3,12 @@ import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt, QFile
 
-from cube import paths
-from cube.config import Config
-from cube import resources
+
+
+import paths
+from config import Config
+
+
 
 
 
@@ -14,18 +17,40 @@ class MainWindow(QtWidgets.QFrame):
         super().__init__(*args, **kwargs)
         self.setObjectName("center")
 
+
         self.cfg = Config(paths.MAIN_CONFIG)
-
-        self.set_style_sheet("abc")
-
-        self.close_btn = self._ctrl_btn("close_btn", "close_program", 64, 64)
-        self.settings_btn = self._ctrl_btn("settings_btn", "show_settings", 64, 64)
-
         self.showFullScreen()
 
-        top_right = self.rect().topRight()
-        self.close_btn.move(top_right.x() - 64, top_right.y())
-        self.settings_btn.move(top_right.x() - 128, top_right.y())
+        self.set_style_sheet("wood")
+
+        self.base_box = QtWidgets.QVBoxLayout(self)
+        self.base_box.setSpacing(1)
+        self.base_box.setContentsMargins(0, 0, 0, 0)
+        self.top_box = QtWidgets.QHBoxLayout()
+        self.center_box = QtWidgets.QHBoxLayout()
+        self.base_box.addLayout(self.top_box)
+
+
+        self.close_btn = self._ctrl_btn("close_btn", "close_program", 48, 48)
+        self.settings_btn = self._ctrl_btn("settings_btn", "show_settings", 48, 48)
+
+
+        self.top_box.addStretch(1)
+        self.top_box.setSpacing(1)
+        self.top_box.setContentsMargins(0, 0, 0, 0)
+        self.top_box.addWidget(self.settings_btn)
+        self.top_box.addWidget(self.close_btn)
+
+        self.work_frame = QtWidgets.QFrame()
+        self.work_frame.setSizePolicy(
+            QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding,
+            QtWidgets.QSizePolicy.Expanding))
+        self.work_frame.setObjectName("work_frame")
+        self.base_box.addWidget(self.work_frame, stretch=5)
+
+
+
+
 
     def _ctrl_btn(self, name, action_name, width, height):
         btn = QtWidgets.QPushButton(self)
@@ -67,3 +92,4 @@ if __name__ == '__main__':
     main = MainWindow()
     main.show()
     sys.exit(app.exec_())
+

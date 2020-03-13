@@ -1,17 +1,19 @@
 import sys
 from PyQt5 import QtWidgets
+import sys
+import paths
+print(paths.ROOT, "!!!!")
+sys.path.insert(0, paths.ROOT)
+from gui.mainwindow import MainWindow
 
-from cube.gui import mainwindow
 
-from cube import paths
 
 def main():
 
     app = QtWidgets.QApplication(sys.argv)
-    # app.setStyleSheet(open('./etc/{0}.qss'.format('style'), "r").read())
-    main = mainwindow.MainWindow(paths.MAIN_CONFIG)
+    main = MainWindow(paths.MAIN_CONFIG)
     main.show()
-
     sys.exit(app.exec_())
 
-main()
+if __name__ == '__main__':
+    main()

@@ -3,6 +3,11 @@ QFrame#center {
     background-image: url("./resource/abc/bg.jpg");
 }
 
+QFrame#work_frame {
+    /*background: red;*/
+    background-color: #d6d6d6;
+}
+
 QPushButton#close_btn {
     border-image: url("./resource/abc/exit.png");
 

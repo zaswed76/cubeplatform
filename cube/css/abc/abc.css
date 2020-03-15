@@ -1,9 +1,7 @@
-
-QFrame#center {
-
-    background-image: url("./resource/wood/bg.jpg");
+QFrame#main {
+    /*background: red;*/
+    background-image: url("./resource/icons/abc/bg.jpg");
 }
-
 
 QFrame#work_frame {
     /*background: red;*/
@@ -11,7 +9,7 @@ QFrame#work_frame {
 }
 
 QPushButton#close_btn {
-    border-image: url("./resource/abc/exit.png");
+    border-image: url("./resource/icons/abc/exit.png");
 
 }
 

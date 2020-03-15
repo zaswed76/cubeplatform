@@ -1,0 +1,22 @@
+
+
+QFrame#main {
+
+    background-image: url("./resource/icons/wood/bg.jpg");
+}
+
+
+QFrame#work_frame {
+    /*background: red;*/
+    background-color: #bdbdbd;
+}
+
+QPushButton#close_btn {
+    border-image: url("./resource/icons/abc/exit.png");
+
+}
+
+QPushButton#settings_btn {
+    border-image: url("./resource/icons/abc/settings.png");
+
+}

@@ -1,4 +1,14 @@
 QFrame#homeWidget {
 
-    background-color: #d3b246;
+    background-color: #49d3b8;
+}
+
+QFrame#appWidget {
+
+    background-color: #858585;
+}
+
+QFrame#noteWidget {
+
+    background-color: #f5f5f5;
 }

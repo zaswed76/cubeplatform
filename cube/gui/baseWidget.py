@@ -5,9 +5,8 @@ from PyQt5.QtCore import Qt
 from PyQt5 import QtWidgets
 from gui.tool.toolpanel import ToolPanel as Tool
 from gui.tool.settingsWidget import SettingsWidget
-from gui.tool.homeWidget import HomeWidget
+from gui.tool.homewidget.homeWidget import HomeWidget
 from gui import workWidget
-from plugins.games1.myFirstGame import Main
 
 
 class BaseWidget(QtWidgets.QFrame):
@@ -35,16 +34,18 @@ class BaseWidget(QtWidgets.QFrame):
         self.left_box.addWidget(self.tool)
 
         self.work_frame = workWidget.WorkWidget()
+        self.plugins = dict()
         self.setWorkWidget()
 
         self.homeWidget = HomeWidget()
+
+
         self.work_frame.insertWidget(0, self.homeWidget)
 
         self.setSettingsWidget()
 
 
-        self.first = Main()
-        self.work_frame.insertWidget(2, self.first)
+
 
         self.showWindow()
 
@@ -86,6 +87,12 @@ class BaseWidget(QtWidgets.QFrame):
                 self.tool_visible = True
                 self.tool.setVisible(self.tool_visible)
 
+    def setPlugins(self, plugins):
+        for plugin in plugins.plugins.values():
+            self.plugins[plugin.index] = plugin.mod_object.Main()
+            self.plugins[plugin.index].setToolTip(plugin.name)
+            self.work_frame.insertWidget(plugin.index, self.plugins[plugin.index])
+            self.homeWidget.app_widget.addGameIcon(plugin.app_icon)
 
 
 if __name__ == '__main__':

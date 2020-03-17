@@ -8,7 +8,7 @@ from config import Config
 from gui import baseWidget
 from libs import filesTool
 import paths
-
+from plugins import plugin
 
 
 
@@ -27,6 +27,10 @@ class MainWindow(QtWidgets.QFrame):
         self.cfg = Config(config_pth)
         self.showFullScreen()
         self.set_style_sheet(self.cfg["style_name"])
+
+        self.plugins = plugin.PluginLoader(paths.PLUGINS_FOLDER)
+        self.plugins.find_plugins()
+
         self.setWorkWidget()
 
     def setWorkWidget(self):
@@ -34,6 +38,8 @@ class MainWindow(QtWidgets.QFrame):
         self.box.setSpacing(0)
         self.box.setContentsMargins(0, 0, 0, 0)
         self.baseWidget = baseWidget.BaseWidget(self, self.cfg)
+        self.baseWidget.setPlugins(self.plugins)
+
         self.box.addWidget(self.baseWidget)
 
 

@@ -1,0 +1,8 @@
+main_name: main.py
+config_name: config.yaml
+app_icon: app.png
+plugins:
+    myFirstGame:
+        index: 2
+    mySecondGame:
+        index: 3

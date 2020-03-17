@@ -13,6 +13,7 @@ class Main(QtWidgets.QFrame):
         self.setStyleSheet('background-color: red;')
 
 
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     # app.setStyleSheet(open('./etc/{0}.qss'.format('style'), "r").read())

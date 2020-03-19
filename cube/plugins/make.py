@@ -25,7 +25,7 @@ def edit_manifest(plugin_name, manifest_path):
     ids = []
     for pl, v in plugins.items():
        ids.append(v["index"])
-    last_id = max(ids)
+    last_id = max(ids) if ids else manifest["start_index"]
     next_id = last_id + 1
     plugins[plugin_name] = {"index": next_id}
     save(manifest_path, manifest)

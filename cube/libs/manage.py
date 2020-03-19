@@ -6,4 +6,4 @@ def makeplugin(name):
         make.plugin(name)
         print("создан плагин - {}".format(name))
     else:
-        print("плагин не создан")
+        print("нужно указать имя, -n name;\nплагин не создан")

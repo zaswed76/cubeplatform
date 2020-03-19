@@ -72,8 +72,7 @@ class PluginLoader:
         self.plugin_dir = plugin_dir
         self.stack_index = 2
         self.__plugins = Plugins()
-        self.cfg = load(os.path.join(self.plugin_dir,  "manifest.yaml"))
-        print(self.cfg)
+
 
 
     @property
@@ -81,13 +80,21 @@ class PluginLoader:
         return self.__plugins
 
     def find_plugins(self):
+        self.cfg = load(os.path.join(self.plugin_dir,  "manifest.yaml"))
+        if not self.cfg["plugins"]:
+            print("в манифесте не зарегистроированы плагины")
+            return
+
         for folder in os.listdir(self.plugin_dir):
+
             path_plugin_dir = os.path.join(self.plugin_dir, folder)
             if os.path.isdir(path_plugin_dir):
                 name = folder
 
+
                 for file in os.listdir(path_plugin_dir):
                     if file == self.cfg["main_name"]:
+                        config = os.path.join(path_plugin_dir, self.cfg["config_name"])
                         main_mod = os.path.join(path_plugin_dir, file)
                         plugin_object = Plugin()
                         plugin_object.full_path = file
@@ -101,9 +108,13 @@ class PluginLoader:
                         if os.path.isfile(config):
                             plugin_object.config = config
                             plugin_object.init_mod()
-                            index = self.cfg["plugins"][name]['index']
-                            plugin_object.index = index
-                            self.plugins[index] = plugin_object
+                            try:
+                                index = self.cfg["plugins"][name]['index']
+                            except KeyError:
+                                print("{} - в манифесте не указан такой плагин".format(name))
+                            else:
+                                plugin_object.index = index
+                                self.plugins[index] = plugin_object
 
 
     def __repr__(self):

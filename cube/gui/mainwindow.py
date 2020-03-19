@@ -1,16 +1,11 @@
-import fileinput
-import glob
 import os
 import sys
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import Qt, QFile
 from config import Config
 from gui import baseWidget
 from libs import filesTool
 import paths
-from plugins import plugin
-
-
+from plugins import pluginLoader
 
 
 class MainWindow(QtWidgets.QFrame):
@@ -28,7 +23,7 @@ class MainWindow(QtWidgets.QFrame):
         self.showFullScreen()
         self.set_style_sheet(self.cfg["style_name"])
 
-        self.plugins = plugin.PluginLoader(paths.PLUGINS_FOLDER)
+        self.plugins = pluginLoader.PluginLoader(paths.PLUGINS_FOLDER)
         self.plugins.find_plugins()
 
         self.setWorkWidget()

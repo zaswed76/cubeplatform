@@ -9,12 +9,13 @@ from gui.tool.homewidget import appWidget
 
 
 class HomeWidget(QtWidgets.QFrame):
-    def __init__(self):
+    def __init__(self, parent):
         """
         панель на которой отображаются значки плагинов
         """
         super().__init__()
 
+        self.base_main = parent
         self.setObjectName("homeWidget")
         self.box = VBoxLayout(QtWidgets.QBoxLayout.TopToBottom,
                               self, spacing=1)
@@ -25,7 +26,7 @@ class HomeWidget(QtWidgets.QFrame):
         self.box.addLayout(self.bottom_box, stretch=4)
 
 
-        self.app_widget = appWidget.AppWidget()
+        self.app_widget = appWidget.AppWidget(self.base_main)
 
 
 

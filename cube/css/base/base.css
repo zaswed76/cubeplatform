@@ -20,3 +20,8 @@ QPushButton#settings_btn {
     border-image: url("./resource/icons/abc/settings.png");
 
 }
+
+QPushButton#home_btn {
+    border-image: url("./resource/icons/abc/home.png");
+
+}

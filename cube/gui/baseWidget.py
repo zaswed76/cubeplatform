@@ -37,7 +37,7 @@ class BaseWidget(QtWidgets.QFrame):
         self.plugins = dict()
         self.setWorkWidget()
 
-        self.homeWidget = HomeWidget()
+        self.homeWidget = HomeWidget(self)
 
 
         self.work_frame.insertWidget(0, self.homeWidget)
@@ -48,6 +48,15 @@ class BaseWidget(QtWidgets.QFrame):
 
 
         self.showWindow()
+
+    def toHome(self):
+        self.work_frame.setCurrentIndex(0)
+
+    def setWorkWidgetToIndex(self, index):
+        # index = self.sender().index
+        print("!!!!!!!!!!")
+        # print(index)
+        self.work_frame.setCurrentIndex(index)
 
     def showWindow(self):
         self.work_frame.setCurrentIndex(2)
@@ -90,9 +99,10 @@ class BaseWidget(QtWidgets.QFrame):
     def setPlugins(self, plugins):
         for plugin in plugins.plugins.values():
             self.plugins[plugin.index] = plugin.mod_object.Main()
+            self.plugins[plugin.index].setObjectName(plugin.name)
             self.plugins[plugin.index].setToolTip(plugin.name)
             self.work_frame.insertWidget(plugin.index, self.plugins[plugin.index])
-            self.homeWidget.app_widget.addGameIcon(plugin.app_icon)
+            self.homeWidget.app_widget.addGameIcon(plugin.index, plugin.app_icon)
 
 
 if __name__ == '__main__':

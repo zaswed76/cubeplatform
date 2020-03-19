@@ -14,7 +14,7 @@ class ControllPanel(QtWidgets.QFrame):
         super().__init__()
         self.main = parent
         self.cfg = cfg
-        print()
+
         if controller is not None:
 
             self.controller = controller(self.main)
@@ -23,10 +23,12 @@ class ControllPanel(QtWidgets.QFrame):
         self.box = QtWidgets.QVBoxLayout(self)
         self.close_btn = self._ctrl_btn("close_btn", "close_program", 48, 48)
         self.settings_btn = self._ctrl_btn("settings_btn", "show_settings", 48, 48)
+        self.home_btn = self._ctrl_btn("home_btn", "toHome", 48, 48)
 
         self.box.addStretch(1)
         self.box.setSpacing(1)
         self.box.setContentsMargins(0, 0, 0, 0)
+        self.box.addWidget(self.home_btn)
         self.box.addWidget(self.settings_btn)
         self.box.addWidget(self.close_btn)
 
@@ -47,6 +49,9 @@ class ControlController:
 
     def show_settings(self):
         self.main.showSettingsWidget()
+
+    def toHome(self):
+        self.main.toHome()
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)

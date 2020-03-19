@@ -1,8 +1,11 @@
-main_name: main.py
-config_name: config.yaml
+abc_class_name: AbcQFrame
 app_icon: app.png
+config_name: config.yaml
+main_name: main.py
 plugins:
-    myFirstGame:
-        index: 2
-    mySecondGame:
-        index: 3
+  myFirstGame: {index: 2}
+  myNewGame3: {index: 4}
+  mySecondGame: {index: 3}
+  zaswed: {index: 5}
+  zaswed2: {index: 6}
+  zaswed23: {index: 7}

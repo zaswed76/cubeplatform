@@ -25,7 +25,7 @@ class Plugins(MutableMapping):
                 return True
 
     def __repr__(self):
-        return str("plugins - {}".format(self.__plugins))
+        return str("plugins.rst - {}".format(self.__plugins))
 
     def __getitem__(self, item):
 
@@ -72,7 +72,8 @@ class PluginLoader:
         self.plugin_dir = plugin_dir
         self.stack_index = 2
         self.__plugins = Plugins()
-        self.cfg = load(os.path.join(self.plugin_dir, "manifest.yaml"))
+        self.cfg = load(os.path.join(self.plugin_dir,  "manifest.yaml"))
+        print(self.cfg)
 
 
     @property

@@ -32,20 +32,16 @@ class Main(AbcQFrame):
         self.plugin_name = None
 
         self.hbox = QtWidgets.QHBoxLayout(self)
-        self.scene = Scene(0, 0, 600, 600, self)
-        self.view = View()
+        self.scene = Scene(0, 0, 800, 800, self)
+        self.view = View(800, 800)
         self.view.setScene(self.scene)
         self.view.setStyleSheet("QGraphicsView { background-color: lightgrey }")
         self.hbox.addWidget(self.view)
 
         self.seqImage = seqImage.Sequence(paths.get_res_folder("cubeSerg/images"))
-        self.seqImage.setNames(4, 50, 61)
-
-        self.seqImage = seqImage.Sequence(paths.get_res_folder("cubeSerg/images"))
-        self.seqImage.setNames(4, 50, 61)
-
+        self.seqImage.setNames(2)
         self.scene.addImages(self.seqImage)
-        # self.scene.setItemsScale(0.3)
+
 
 
 if __name__ == '__main__':

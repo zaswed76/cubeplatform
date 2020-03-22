@@ -38,16 +38,13 @@ class GraphicsImage(QtWidgets.QGraphicsPixmapItem):
         self.setTransformOriginPoint(s, s)
 
 
-    def mirrors(self):
+    def setFlip(self):
+        self.setTransform(self.tr.scale(-1, 1))
         if not self.flip:
-            self.tr.scale(-1, 1)
-            self.setTransform(self.tr)
-            self.moveBy(459, 0)
+            self.moveBy(self.image_size, 0)
             self.flip = not self.flip
         else:
-            self.tr.scale(-1, 1)
-            self.setTransform(self.tr)
-            self.moveBy(-459, 0)
+            self.moveBy(-self.image_size, 0)
             self.flip = not self.flip
 
 
@@ -100,7 +97,7 @@ class Scene(QtWidgets.QGraphicsScene):
 
     def mirrorsItem(self, *args):
         for i in self.selectedItems():
-            i.mirrors()
+            i.setFlip()
 
     def rotateItems(self, delta: float):
         for i in self.selectedItems():
@@ -125,9 +122,9 @@ class Scene(QtWidgets.QGraphicsScene):
 
 
 class View(QtWidgets.QGraphicsView):
-    def __init__(self):
+    def __init__(self, width, height):
         super().__init__()
-        self.setFixedSize(604, 604)
+        self.setFixedSize(width+4, height+4)
 
 
 if __name__ == '__main__':

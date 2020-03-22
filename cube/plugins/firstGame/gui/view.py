@@ -54,7 +54,7 @@ class Scene(QtWidgets.QGraphicsScene):
             i.setSelected(select)
 
     def getItemsGeometry(self):
-        pass
+        return [x for x in self.items()]
 
 
 

@@ -4,80 +4,13 @@ import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
 
 
-class GraphicsImage(QtWidgets.QGraphicsPixmapItem):
-    def __init__(self, path, name, scene):
-        super().__init__()
-        self.scene = scene
-        self.name = name
-        self.path = path
-
-        self._pixmap = QtGui.QPixmap(path)
-        self.image_size = self._pixmap.size().width()
-        self.setPixmap(self._pixmap)
-        self.setTransformationMode(
-            QtCore.Qt.SmoothTransformation)
-        self.setFlag(QtWidgets.QGraphicsPixmapItem.ItemIsMovable
-                     )
-        self.setFlag(QtWidgets.QGraphicsPixmapItem.ItemIsSelectable)
-
-        self.scaled = 1.0
-        self.rotate_mod = 0.0
-        self.flip = False
-        self.move_start()
-        self.tr = QtGui.QTransform()
-
-
-
-    def move_start(self):
-
-        # self.moveBy(0, 110)
-        s = (self.scale() * self.image_size) / 2
-
-
-
-        self.setTransformOriginPoint(s, s)
-
-
-    def setFlip(self):
-        self.setTransform(self.tr.scale(-1, 1))
-        if not self.flip:
-            self.moveBy(self.image_size, 0)
-            self.flip = not self.flip
-        else:
-            self.moveBy(-self.image_size, 0)
-            self.flip = not self.flip
-
-
-    def setRotate(self, delta):
-        mod = 3
-        if delta < 0:
-            mod *= -1
-        self.rotate_mod += mod
-        self.setRotation(self.rotate_mod)
-
-    @property
-    def width(self):
-        return self.sceneBoundingRect().size().width()
-
-    @property
-    def height(self):
-        return self.sceneBoundingRect().size().height()
-
-    def to_center(self):
-        w = self.scene.width() / 2 - self.width / 2
-        h = self.scene.height() / 2 - self.height / 2
-        self.setPos(w, h)
-
-    def to_right_top(self):
-        x = self.scene.sceneRect().right() - self.width
-        y = 0
-        self.setPos(x, y)
-
-
 
 class Scene(QtWidgets.QGraphicsScene):
-    def __init__(self, x, y, width, height, parent=None):
+    def __init__(self, x, y, width, height, GraphicsImage, imgdir, ext, parent=None):
         super().__init__(parent=None)
+        self.ext = ext
+        self.imgdir = imgdir
+        self.GraphicsImage = GraphicsImage
         self.setSceneRect(x, y, width, height)
         self.keyMap = {}
         control = {
@@ -88,8 +21,8 @@ class Scene(QtWidgets.QGraphicsScene):
         self.keyMap["ctrl"] = control
 
     def addImages(self, GraphicsItemList):
-        for item in GraphicsItemList:
-            self.addItem(GraphicsImage(item.path, item.name, self))
+        for name in GraphicsItemList:
+            self.addItem(self.GraphicsImage(self, name, self.imgdir, self.ext))
 
     def scaledtems(self, delta: float):
         for i in self.selectedItems():
@@ -119,6 +52,10 @@ class Scene(QtWidgets.QGraphicsScene):
     def setAllSelected(self, select):
         for i in self.items():
             i.setSelected(select)
+
+    def getItemsGeometry(self):
+        pass
+
 
 
 class View(QtWidgets.QGraphicsView):

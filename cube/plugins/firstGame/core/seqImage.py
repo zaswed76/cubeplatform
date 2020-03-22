@@ -1,38 +1,16 @@
-
 from collections.abc import MutableSequence
-from pathlib import Path
-
-
-
-class Item:
-    def __init__(self, value, imgdir=None, ext=".png"):
-        self.ext = ext
-        self.imgdir = imgdir
-        self.name = str(value)
-
-    @property
-    def path(self):
-        if self.imgdir is not None:
-            name = self.name + self.ext
-            return str(Path(self.imgdir) / name)
-
-    def __repr__(self):
-        return f"{self.name}"
-
 
 class Sequence(MutableSequence):
-    def __init__(self, imgdir=None, ext=".png"):
-        self.ext = ext
-        self.imgdir = imgdir
+    def __init__(self):
         self._lst = []
 
     def setTen(self, ten, step=1):
         self._lst.clear()
-        self._lst.extend([Item(x, self.imgdir, self.ext) for x in range(ten, ten+10, step)])
+        self._lst.extend([str(x)for x in range(ten, ten+10, step)])
 
     def setNames(self, *names):
         self._lst.clear()
-        self._lst.extend([Item(x, self.imgdir, self.ext) for x in names])
+        self._lst.extend(str(x) for x in names)
 
     @property
     def data(self):
@@ -57,12 +35,12 @@ class Sequence(MutableSequence):
         return f"{self.start} - {self.end}; step - {self.step}"
 
 if __name__ == '__main__':
-    import paths
-    imgseq = Sequence(paths.get_res_folder("cubeSerg", "images"))
+
+    imgseq = Sequence()
     imgseq.setTen(90)
     imgseq.setNames(0, 5, 45)
     for i in imgseq:
-        print(i.path)
+        print(i)
 
 
 

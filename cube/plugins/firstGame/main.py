@@ -4,10 +4,12 @@ import sys
 from PyQt5 import QtWidgets
 from plugins.abcPlugin import AbcQFrame
 from plugins.firstGame.gui.view import View, Scene
+from plugins.firstGame.gui.imageItem import GraphicsImage
 from plugins.firstGame.gui.tools import Tools, ToolsController
 from plugins.firstGame.core import seqImage
 import paths
 from PyQt5.QtCore import *
+
 
 
 def qt_message_handler(mode, context, message):
@@ -35,7 +37,7 @@ class Main(AbcQFrame):
         self.hbox = QtWidgets.QHBoxLayout(self)
         self.hbox.setContentsMargins(0, 0, 0, 0)
         self.hbox.setSpacing(1)
-        self.scene = Scene(0, 0, 800, 800, self)
+        self.scene = Scene(0, 0, 800, 800, GraphicsImage, paths.get_res_folder("cubeSerg", "images"), ".png", self)
         self.view = View(800, 800)
         self.view.setScene(self.scene)
         self.view.setStyleSheet("QGraphicsView { background-color: lightgrey }")
@@ -47,12 +49,12 @@ class Main(AbcQFrame):
 
         self.hbox.addWidget(self.tools, stretch=5)
 
-        self.seqImage = seqImage.Sequence(paths.get_res_folder("cubeSerg/images"))
+        self.seqImage = seqImage.Sequence()
         self.seqImage.setNames(92)
         self.scene.addImages(self.seqImage)
 
     def saveGeometry(self):
-        print("saveGeometry")
+        self.scene.getItemsGeometry()
 
     def returnGeometry(self):
         print("returnGeometry")

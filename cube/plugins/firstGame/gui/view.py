@@ -56,6 +56,14 @@ class Scene(QtWidgets.QGraphicsScene):
         super().__init__(parent=None)
         self.setSceneRect(x, y, width, height)
 
+    def addItems(self, GraphicsItemList):
+        for item in GraphicsItemList:
+            self.addItem(item)
+
+    def setItemsScale(self, scale: float):
+        for i in self.items():
+            i.setScale(scale)
+
 
 class View(QtWidgets.QGraphicsView):
     def __init__(self):
@@ -66,6 +74,6 @@ class View(QtWidgets.QGraphicsView):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     # app.setStyleSheet(open('./etc/{0}.qss'.format('style'), "r").read())
-    main = Widget()
+    main = View()
     main.show()
     sys.exit(app.exec_())

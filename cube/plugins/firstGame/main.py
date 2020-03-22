@@ -3,7 +3,8 @@
 import sys
 from PyQt5 import QtWidgets
 from plugins.abcPlugin import AbcQFrame
-from plugins.firstGame.gui.view import View, Scene, GraphicsImage
+from plugins.firstGame.gui.view import View, Scene
+from plugins.firstGame.gui.tools import Tools, ToolsController
 from plugins.firstGame.core import seqImage
 import paths
 from PyQt5.QtCore import *
@@ -32,17 +33,29 @@ class Main(AbcQFrame):
         self.plugin_name = None
 
         self.hbox = QtWidgets.QHBoxLayout(self)
+        self.hbox.setContentsMargins(0, 0, 0, 0)
+        self.hbox.setSpacing(1)
         self.scene = Scene(0, 0, 800, 800, self)
         self.view = View(800, 800)
         self.view.setScene(self.scene)
         self.view.setStyleSheet("QGraphicsView { background-color: lightgrey }")
-        self.hbox.addWidget(self.view)
+        self.hbox.addWidget(self.view, stretch=35)
+
+        self.toolsController = ToolsController(self)
+        self.tools = Tools(self.toolsController)
+        # self.tools.setController(self.toolsController)
+
+        self.hbox.addWidget(self.tools, stretch=5)
 
         self.seqImage = seqImage.Sequence(paths.get_res_folder("cubeSerg/images"))
-        self.seqImage.setNames(2)
+        self.seqImage.setNames(92)
         self.scene.addImages(self.seqImage)
 
+    def saveGeometry(self):
+        print("saveGeometry")
 
+    def returnGeometry(self):
+        print("returnGeometry")
 
 if __name__ == '__main__':
 

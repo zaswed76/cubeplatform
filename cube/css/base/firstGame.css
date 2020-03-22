@@ -1,3 +1,8 @@
 QFrame#firstGame{
     background-color: #49d3b8;
 }
+
+QFrame#firstGame_tools{
+    background-color: #989898;
+}
+

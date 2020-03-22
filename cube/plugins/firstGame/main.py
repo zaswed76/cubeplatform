@@ -4,8 +4,27 @@ import sys
 from PyQt5 import QtWidgets
 from plugins.abcPlugin import AbcQFrame
 from plugins.firstGame.gui.view import View, Scene, GraphicsImage
+from plugins.firstGame.core import seqImage
 import paths
-from pathlib import Path
+from PyQt5.QtCore import *
+
+
+def qt_message_handler(mode, context, message):
+    if mode == QtInfoMsg:
+        mode = 'INFO'
+    elif mode == QtWarningMsg:
+        mode = 'WARNING'
+    elif mode == QtCriticalMsg:
+        mode = 'CRITICAL'
+    elif mode == QtFatalMsg:
+        mode = 'FATAL'
+    else:
+        mode = 'DEBUG'
+    print('qt_message_handler: line: %d, func: %s(), file: %s' % (
+          context.line, context.function, context.file))
+    print('  %s: %s\n' % (mode, message))
+
+qInstallMessageHandler(qt_message_handler)
 
 class Main(AbcQFrame):
     def __init__(self):
@@ -19,12 +38,14 @@ class Main(AbcQFrame):
         self.view.setStyleSheet("QGraphicsView { background-color: lightgrey }")
         self.hbox.addWidget(self.view)
 
-        self.imageItem = GraphicsImage(paths.get_res_folder("cubeSerg/images/4.png"), "4", self.scene)
-        self.imageItem2 = GraphicsImage(paths.get_res_folder("cubeSerg/images/50.png"), "50", self.scene)
-        self.imageItem.setScale(0.3)
-        self.imageItem.to_right_top()
-        self.scene.addItems((self.imageItem, self.imageItem2))
-        self.scene.setItemsScale(0.3)
+        self.seqImage = seqImage.Sequence(paths.get_res_folder("cubeSerg/images"))
+        self.seqImage.setNames(4, 50, 61)
+
+        self.seqImage = seqImage.Sequence(paths.get_res_folder("cubeSerg/images"))
+        self.seqImage.setNames(4, 50, 61)
+
+        self.scene.addImages(self.seqImage)
+        # self.scene.setItemsScale(0.3)
 
 
 if __name__ == '__main__':

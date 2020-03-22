@@ -14,6 +14,7 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Manage" href="manage.html" />
     <link rel="prev" title="Welcome to cubeplatform’s documentation!" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -33,6 +34,33 @@
             
   <div class="section" id="plugins">
 <h1>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>Добавляем плагин.<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Все плагины находятся в каталоге plugis.
+Каталог содержит такие файлы:</p>
+<ol class="arabic simple">
+<li><p>abcPlugin.py</p></li>
+<li><p>manifest.yaml</p></li>
+<li><p>pluginLoader.py</p></li>
+<li><p>__init__.py</p></li>
+</ol>
+<p>Ваш плагин - это питон пакет с произвольным названием, но
+соответствующий правилам наименования python пакетов
+в котором находятся обязательные четыре файла:</p>
+<ol class="arabic simple">
+<li><p>__init__.py</p></li>
+<li><p>app.png</p></li>
+<li><p>config.yaml</p></li>
+<li><p>main.py</p></li>
+</ol>
+<p>Что бы добавить плагин  в проект рекомендуется воспользоваться
+скриптом <a class="reference internal" href="manage.html"><span class="doc">Manage</span></a> который находится в пакете cube
+и командой makeplugin.</p>
+<p>например:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">makeplugin</span> <span class="n">my_test_game</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -54,7 +82,11 @@
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Plugins</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Plugins</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Добавляем плагин.</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manage.html">Manage</a></li>
 </ul>
 
 <div class="relations">
@@ -62,6 +94,7 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="index.html" title="previous chapter">Welcome to cubeplatform’s documentation!</a></li>
+      <li>Next: <a href="manage.html" title="next chapter">Manage</a></li>
   </ul></li>
 </ul>
 </div>

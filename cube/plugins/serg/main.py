@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
 
 import sys
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets
+from plugins.abcPlugin import AbcQFrame
 
-
-
-class SettingsWidget(QtWidgets.QFrame):
+class Main(AbcQFrame):
     def __init__(self):
         super().__init__()
-        self.setObjectName("settingsWidget")
-        self.setToolTip("Settings")
-        self.box = QtWidgets.QHBoxLayout(self)
+
+
+
+
+
 
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     # app.setStyleSheet(open('./etc/{0}.qss'.format('style'), "r").read())
-    main = SettingsWidget()
+    main = Main()
+    print(main)
     main.show()
     sys.exit(app.exec_())

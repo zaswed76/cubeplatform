@@ -11,7 +11,7 @@ Welcome to cubeplatform's documentation!
    :caption: Contents:
 
    plugins
-
+   manage
 
 
 Indices and tables

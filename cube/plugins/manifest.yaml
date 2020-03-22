@@ -2,5 +2,8 @@ abc_class_name: AbcQFrame
 app_icon: app.png
 config_name: config.yaml
 main_name: main.py
-plugins: {}
+plugins:
+  VladGame: {index: 3}
+  firstGame: {index: 2}
+  serg: {index: 4}
 start_index: 1

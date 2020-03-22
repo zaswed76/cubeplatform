@@ -24,7 +24,6 @@ class AppWidget(QtWidgets.QFrame):
 
 
     def addGameIcon(self, index, icon):
-        print(index, icon)
         btn = AppButton()
         btn.index = index
         btn.clicked.connect(self.press)

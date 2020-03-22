@@ -21,32 +21,27 @@ class MainWindow(QtWidgets.QFrame):
         self.setObjectName("main")
         self.cfg = Config(config_pth)
         self.showFullScreen()
-        self.set_style_sheet(self.cfg["style_name"])
+        self._set_style_sheet(self.cfg["style_name"])
 
         self.plugins = pluginLoader.PluginLoader(paths.PLUGINS_FOLDER)
         self.plugins.find_plugins()
 
-        self.setWorkWidget()
+        self._setBaseWidget()
 
-    def setWorkWidget(self):
+    def _setBaseWidget(self):
         self.box = QtWidgets.QHBoxLayout(self)
         self.box.setSpacing(0)
         self.box.setContentsMargins(0, 0, 0, 0)
         self.baseWidget = baseWidget.BaseWidget(self, self.cfg)
         self.baseWidget.setPlugins(self.plugins)
-
         self.box.addWidget(self.baseWidget)
-
-
-
-
 
 
     def closeEvent(self, event):
         self.cfg["screen_size"] = [self.size().width(), self.size().height()]
         self.cfg.save()
 
-    def set_style_sheet(self, sheetName):
+    def _set_style_sheet(self, sheetName):
         """
         :param sheetName: str имя стиля
         """

@@ -11,6 +11,12 @@ default_config = dict(
 
 class ControllPanel(QtWidgets.QFrame):
     def __init__(self, parent=None, controller=None, cfg=default_config):
+        """
+        панель управления слева toolpanel > controllPanel
+        :param parent:
+        :param controller:
+        :param cfg:
+        """
         super().__init__()
         self.main = parent
         self.cfg = cfg

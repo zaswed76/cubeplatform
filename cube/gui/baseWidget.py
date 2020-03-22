@@ -4,9 +4,9 @@ import sys
 from PyQt5.QtCore import Qt
 from PyQt5 import QtWidgets
 from gui.tool.toolpanel import ToolPanel as Tool
-from gui.tool.settingsWidget import SettingsWidget
+from gui.tool.settings.settingsWidget import SettingsWidget
 from gui.tool.homewidget.homeWidget import HomeWidget
-from gui import workWidget
+from gui import workStackWidget
 
 
 class BaseWidget(QtWidgets.QFrame):
@@ -19,72 +19,67 @@ class BaseWidget(QtWidgets.QFrame):
         super().__init__()
         self.cfg = cfg
         self.main = parent
+        self.plugins = dict()
         self.tool_visible = True
         self.settings_visible = False
-        self.last_index = 2
+        # последний видимый индекс
+        self.last_index = 0
         self.base_box = QtWidgets.QHBoxLayout(self)
         self.base_box.setSpacing(1)
         self.base_box.setContentsMargins(0, 0, 0, 0)
         self.left_box = QtWidgets.QVBoxLayout()
         self.center_box = QtWidgets.QHBoxLayout()
         self.base_box.addLayout(self.left_box)
-
+        # ---- tool -------
         self.tool = Tool(self)
         self.tool.setVisible(self.tool_visible)
         self.left_box.addWidget(self.tool)
 
-        self.work_frame = workWidget.WorkWidget()
-        self.plugins = dict()
-        self.setWorkWidget()
+        # ---- workStackWidget -------
+        self.workStackWidget = workStackWidget.WorkStackWidget()
+        self.workStackWidget.setSizePolicy(
+            QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                                  QtWidgets.QSizePolicy.Expanding))
+        self.workStackWidget.setObjectName("work_frame")
+        self.base_box.addWidget(self.workStackWidget, stretch=5)
 
         self.homeWidget = HomeWidget(self)
 
 
-        self.work_frame.insertWidget(0, self.homeWidget)
+        self.workStackWidget.insertWidget(0, self.homeWidget)
 
         self.setSettingsWidget()
-
-
-
-
         self.showWindow()
 
     def toHome(self):
-        self.work_frame.setCurrentIndex(0)
+        self.workStackWidget.setCurrentIndex(0)
+        self.last_index = 0
 
     def setWorkWidgetToIndex(self, index):
-        # index = self.sender().index
-        print("!!!!!!!!!!")
-        # print(index)
-        self.work_frame.setCurrentIndex(index)
+        self.workStackWidget.setCurrentIndex(index)
+        self.last_index = index
 
     def showWindow(self):
-        self.work_frame.setCurrentIndex(2)
+        self.workStackWidget.setCurrentIndex(2)
         self.last_index = 2
 
     def setSettingsWidget(self):
         self.settingsWidget = SettingsWidget()
-        self.work_frame.insertWidget(1, self.settingsWidget)
+        self.workStackWidget.insertWidget(1, self.settingsWidget)
 
     def showSettingsWidget(self):
         if not self.settings_visible:
-            self.work_frame.setCurrentIndex(1)
+            self.workStackWidget.setCurrentIndex(1)
             self.settings_visible = True
         else:
-            self.work_frame.setCurrentIndex(self.last_index)
+            self.workStackWidget.setCurrentIndex(self.last_index)
             self.settings_visible = False
 
 
     def close(self):
         self.main.close()
 
-    def setWorkWidget(self):
 
-        self.work_frame.setSizePolicy(
-            QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding,
-                                  QtWidgets.QSizePolicy.Expanding))
-        self.work_frame.setObjectName("work_frame")
-        self.base_box.addWidget(self.work_frame, stretch=5)
 
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_F12:
@@ -101,7 +96,7 @@ class BaseWidget(QtWidgets.QFrame):
             self.plugins[plugin.index] = plugin.mod_object.Main()
             self.plugins[plugin.index].setObjectName(plugin.name)
             self.plugins[plugin.index].setToolTip(plugin.name)
-            self.work_frame.insertWidget(plugin.index, self.plugins[plugin.index])
+            self.workStackWidget.insertWidget(plugin.index, self.plugins[plugin.index])
             self.homeWidget.app_widget.addGameIcon(plugin.index, plugin.app_icon)
 
 

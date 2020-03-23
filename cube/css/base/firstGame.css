@@ -6,3 +6,8 @@ QFrame#firstGame_tools{
     background-color: #989898;
 }
 
+QGraphicsView#firstGame_View{
+    background-color: #f3f3f3;
+}
+
+

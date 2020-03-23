@@ -35,7 +35,7 @@ class GraphicsImage(QtWidgets.QGraphicsPixmapItem):
             return str(Path(self.imgdir) / name)
 
     def __repr__(self):
-        return f"{self.name}"
+        return f"Pixmap-{self.name}"
 
     def move_start(self):
         s = (self.scale() * self.image_size) / 2

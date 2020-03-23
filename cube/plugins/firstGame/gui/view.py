@@ -6,8 +6,9 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 
 
 class Scene(QtWidgets.QGraphicsScene):
-    def __init__(self, x, y, width, height, GraphicsImage, imgdir, ext, parent=None):
+    def __init__(self, rect, GraphicsImage, imgdir, ext, parent=None):
         super().__init__(parent=None)
+        x, y, width, height = rect
         self.ext = ext
         self.imgdir = imgdir
         self.GraphicsImage = GraphicsImage
@@ -59,8 +60,10 @@ class Scene(QtWidgets.QGraphicsScene):
 
 
 class View(QtWidgets.QGraphicsView):
-    def __init__(self, width, height):
+    def __init__(self, size):
         super().__init__()
+        self.setObjectName("firstGame_View")
+        width, height = size
         self.setFixedSize(width+4, height+4)
 
 

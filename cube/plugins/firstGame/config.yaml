@@ -1,1 +1,3 @@
 version: 0.1
+sceneRect: [0, 0, 800, 800]
+viewSize: [800, 800]

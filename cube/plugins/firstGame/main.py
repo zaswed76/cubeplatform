@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 import sys
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
+from pathlib import Path
+import config
 from plugins.abcPlugin import AbcQFrame
 from plugins.firstGame.gui.view import View, Scene
 from plugins.firstGame.gui.imageItem import GraphicsImage
@@ -9,6 +11,7 @@ from plugins.firstGame.gui.tools import Tools, ToolsController
 from plugins.firstGame.core import seqImage
 import paths
 from PyQt5.QtCore import *
+
 
 
 
@@ -34,13 +37,17 @@ class Main(AbcQFrame):
         super().__init__()
         self.plugin_name = None
 
+        self.cfg = config.Config(str(Path(paths.PLUGINS_FOLDER) / "firstGame" / "config.yaml"))
+        print(self.cfg["version"])
+
         self.hbox = QtWidgets.QHBoxLayout(self)
         self.hbox.setContentsMargins(0, 0, 0, 0)
-        self.hbox.setSpacing(1)
-        self.scene = Scene(0, 0, 800, 800, GraphicsImage, paths.get_res_folder("cubeSerg", "images"), ".png", self)
-        self.view = View(800, 800)
+        self.hbox.setSpacing(6)
+        sceneRect = self.cfg["sceneRect"]
+        resource_path = paths.get_res_folder("cubeSerg", "images")
+        self.scene = Scene(sceneRect, GraphicsImage, resource_path, ".png", self)
+        self.view = View(self.cfg["viewSize"])
         self.view.setScene(self.scene)
-        self.view.setStyleSheet("QGraphicsView { background-color: lightgrey }")
         self.hbox.addWidget(self.view, stretch=35)
 
         self.toolsController = ToolsController(self)
@@ -54,7 +61,8 @@ class Main(AbcQFrame):
         self.scene.addImages(self.seqImage)
 
     def saveGeometry(self):
-        self.scene.getItemsGeometry()
+        for i in self.scene.getItemsGeometry():
+            print(i.pos().x(), i.pos().y())
 
     def returnGeometry(self):
         print("returnGeometry")

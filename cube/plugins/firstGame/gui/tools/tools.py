@@ -26,6 +26,7 @@ class Tools(QtWidgets.QFrame):
         self.box.setContentsMargins(0, 0, 0, 0)
         self.box.setSpacing(1)
         self.tub = QtWidgets.QTabWidget()
+        # self.tub.setTabPosition(QtWidgets.QTabWidget.West)
         self.tub.setMovable(True)
         print(self.main, "main")
         self.tub.addTab(toolimagees.ToolAddImagesTub(parent=self.main), "AddImages")

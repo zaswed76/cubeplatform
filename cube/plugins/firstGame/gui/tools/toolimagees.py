@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 from functools import partial
 
 class Dialog(QtWidgets.QInputDialog):
@@ -17,7 +17,24 @@ class ToolImagesTub(QtWidgets.QFrame):
     def __init__(self, parent=None):
         super().__init__()
         self.setStyleSheet("background-color: #616163")
-        self.box = QtWidgets.QHBoxLayout(self)
+        self.box = QtWidgets.QVBoxLayout(self)
+        self.list = QtWidgets.QListView()
+        self.list.setDropIndicatorShown(False)
+        # self.list.setMovement(QtWidgets.QListView.Snap)
+        self.list.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
+        self.entry = QtGui.QStandardItemModel()
+        self.list.setModel(self.entry)
+        self.box.addWidget(self.list)
+
+        for text in ["Itemname1", "Itemname2", "Itemname3", "Itemname4"]:
+            it = QtGui.QStandardItem(text)
+            self.entry.appendRow(it)
+        # self.tub.setTabPosition(QtWidgets.QTabWidget.West)
+        #
+        # for x in range(0, 101, 10):
+        #     btn = QtWidgets.QPushButton(str(x))
+        #     btn.setFixedWidth(200)
+        #     self.tub.addTab(btn, str(x))
 
 class ToolAddImagesTub(QtWidgets.QFrame):
     def __init__(self, parent=None, *args, **kwargs):

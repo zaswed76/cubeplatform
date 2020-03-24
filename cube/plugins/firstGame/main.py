@@ -38,14 +38,16 @@ class Main(AbcQFrame):
         self.plugin_name = None
 
         self.cfg = config.Config(str(Path(paths.PLUGINS_FOLDER) / "firstGame" / "config.yaml"))
-        print(self.cfg["version"])
+
+        self.itemsGeometry = config.Config(str(Path(paths.PLUGINS_FOLDER) / "firstGame" / "itemGeometry.yaml"))
+
 
         self.hbox = QtWidgets.QHBoxLayout(self)
         self.hbox.setContentsMargins(0, 0, 0, 0)
-        self.hbox.setSpacing(6)
+        self.hbox.setSpacing(1)
         sceneRect = self.cfg["sceneRect"]
         resource_path = paths.get_res_folder("cubeSerg", "images")
-        self.scene = Scene(sceneRect, GraphicsImage, resource_path, ".png", self)
+        self.scene = Scene(sceneRect, GraphicsImage, resource_path, ".png", self.itemsGeometry,  self)
         self.view = View(self.cfg["viewSize"])
         self.view.setScene(self.scene)
         self.hbox.addWidget(self.view, stretch=35)
@@ -57,12 +59,14 @@ class Main(AbcQFrame):
         self.hbox.addWidget(self.tools, stretch=5)
 
         self.seqImage = seqImage.Sequence()
-        self.seqImage.setNames(92)
+        self.seqImage.setTen(0)
         self.scene.addImages(self.seqImage)
 
     def saveGeometry(self):
         for i in self.scene.getItemsGeometry():
-            print(i.pos().x(), i.pos().y())
+            self.itemsGeometry[i.name] = i.itemsGeometry
+            print(i.itemsGeometry)
+        self.itemsGeometry.save()
 
     def returnGeometry(self):
         print("returnGeometry")

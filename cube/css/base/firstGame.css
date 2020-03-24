@@ -1,5 +1,9 @@
 QFrame#firstGame{
-    background-color: #49d3b8;
+    background-color: #7b7b7d;
+    border-right: none;
+    border-left: none;
+    border-top: none;
+    border-bottom: none;
 }
 
 QFrame#firstGame_tools{

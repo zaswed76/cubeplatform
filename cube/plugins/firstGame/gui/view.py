@@ -6,8 +6,20 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 
 
 class Scene(QtWidgets.QGraphicsScene):
-    def __init__(self, rect, GraphicsImage, imgdir, ext, parent=None):
-        super().__init__(parent=None)
+    def __init__(self, rect, GraphicsImage, imgdir, ext, itemsGeometry, parent=None,
+                 *__args):
+        """
+
+        :param rect: (x: int, y: int, width: int, height: int)
+        :param GraphicsImage: gui.imageItem.GraphicsImage
+        :param imgdir: str
+        :param ext: str
+        :param itemsGeometry: dict
+        :param parent: main
+        :param __args:
+        """
+        super().__init__(*__args)
+        self.itemsGeometry = itemsGeometry
         x, y, width, height = rect
         self.ext = ext
         self.imgdir = imgdir
@@ -23,7 +35,7 @@ class Scene(QtWidgets.QGraphicsScene):
 
     def addImages(self, GraphicsItemList):
         for name in GraphicsItemList:
-            self.addItem(self.GraphicsImage(self, name, self.imgdir, self.ext))
+            self.addItem(self.GraphicsImage(self, name, self.itemsGeometry.get(name, {}), self.imgdir, self.ext))
 
     def scaledtems(self, delta: float):
         for i in self.selectedItems():

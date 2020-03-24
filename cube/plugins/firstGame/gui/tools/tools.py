@@ -2,6 +2,7 @@
 
 import sys
 from PyQt5 import QtWidgets, QtCore
+from plugins.firstGame.gui.tools import toolimagees
 
 class ToolsController(QtCore.QObject):
     def __init__(self, parent):
@@ -15,22 +16,37 @@ class ToolsController(QtCore.QObject):
         self.main.returnGeometry()
 
 class Tools(QtWidgets.QFrame):
-    def __init__(self, controller):
-        super().__init__()
+    def __init__(self, controller, parent,  *args, **kwargs):
+
+        super().__init__(parent, *args, **kwargs)
+        self.main = parent
         self.setObjectName("firstGame_tools")
         self._controller = controller
         self.box = QtWidgets.QVBoxLayout(self)
+        self.box.setContentsMargins(0, 0, 0, 0)
+        self.box.setSpacing(1)
+        self.tub = QtWidgets.QTabWidget()
+        self.tub.setMovable(True)
+        print(self.main, "main")
+        self.tub.addTab(toolimagees.ToolAddImagesTub(parent=self.main), "AddImages")
+        self.tub.addTab(toolimagees.ToolImagesTub(parent=self.main), "Images")
+
+
 
         self.saveBtn = QtWidgets.QPushButton("save")
+        self.saveBtn.setFixedWidth(200)
         self.saveBtn.clicked.connect(self._controller.saveBtn)
         self.returnBtn = QtWidgets.QPushButton("return")
         self.returnBtn.clicked.connect(self._controller.returnBtn)
         self.box.addWidget(self.saveBtn)
         self.box.addWidget(self.returnBtn)
-        self.box.addStretch(1)
+        # self.box.addStretch(1)
+        self.box.addWidget(self.tub)
 
     def setController(self, controller):
         self._controller = controller
+
+
 
 
 if __name__ == '__main__':

@@ -7,7 +7,7 @@ import config
 from plugins.abcPlugin import AbcQFrame
 from plugins.firstGame.gui.view import View, Scene
 from plugins.firstGame.gui.imageItem import GraphicsImage
-from plugins.firstGame.gui.tools import Tools, ToolsController
+from plugins.firstGame.gui.tools import tools
 from plugins.firstGame.core import seqImage
 import paths
 from PyQt5.QtCore import *
@@ -52,24 +52,31 @@ class Main(AbcQFrame):
         self.view.setScene(self.scene)
         self.hbox.addWidget(self.view, stretch=35)
 
-        self.toolsController = ToolsController(self)
-        self.tools = Tools(self.toolsController)
+        self.toolsController = tools.ToolsController(self)
+        self.tools = tools.Tools(self.toolsController, parent=self)
         # self.tools.setController(self.toolsController)
 
         self.hbox.addWidget(self.tools, stretch=5)
 
         self.seqImage = seqImage.Sequence()
-        self.seqImage.setTen(0)
-        self.scene.addImages(self.seqImage)
+
+
 
     def saveGeometry(self):
         for i in self.scene.getItemsGeometry():
             self.itemsGeometry[i.name] = i.itemsGeometry
-            print(i.itemsGeometry)
         self.itemsGeometry.save()
 
     def returnGeometry(self):
         print("returnGeometry")
+
+    def newTen(self, ten):
+        print(self.sender().text())
+        self.scene.clear()
+        self.seqImage.setTen(ten)
+        self.scene.addImages(self.seqImage)
+
+
 
 if __name__ == '__main__':
 

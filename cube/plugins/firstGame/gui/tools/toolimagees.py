@@ -29,6 +29,10 @@ class ToolImagesTub(QtWidgets.QFrame):
         self.box.addWidget(self.view)
         self.box.addLayout(self.vbox)
 
+    def selectToIndex(self, *indexs):
+        # if not flagClosure:
+            self.view.selectToIndex(*indexs)
+
     def selectedItems(self):
         return self.view.selectedItems()
 
@@ -64,6 +68,7 @@ class Btn(QtWidgets.QPushButton):
 
         super().__init__(*__args)
         self.setCheckable(True)
+        self.setAutoExclusive(False)
         self.setStyleSheet('background: white;')
 
 
@@ -98,19 +103,22 @@ class _ToolImagesTub(QtWidgets.QFrame):
             self.group.addButton(i)
         self.box.addStretch(5)
 
-    def selectToIndex(self, index):
+    def selectToIndex(self, *indexs):
+        self.clearSelecteted()
         for i, e in enumerate(self.group.buttons()):
-            if i == index:
+            if i in indexs:
                 e.setChecked(True)
 
     def selectedItems(self):
         lst = []
         for index, e in enumerate(self.group.buttons()):
             if e.isChecked():
-                print(type(index))
                 lst.append((index, e))
-
         return lst
+
+    def clearSelecteted(self):
+        for e in self.group.buttons():
+            e.setChecked(False)
 
 class ToolAddImagesTub(QtWidgets.QFrame):
     def __init__(self, parent=None, *args, **kwargs):

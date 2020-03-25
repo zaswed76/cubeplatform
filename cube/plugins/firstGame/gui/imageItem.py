@@ -6,12 +6,14 @@ from pathlib import Path
 
 
 class GraphicsImage(QtWidgets.QGraphicsPixmapItem):
-    def __init__(self, scene, name, itemsGeometry, imgdir, ext):
+    def __init__(self, scene, name, itemsGeometry, imgdir, ext, main=None):
         super().__init__()
 
+        self.main = main
         self.scene = scene
         self.name = name
         self.itemsGeometry = itemsGeometry
+
 
 
 
@@ -102,6 +104,13 @@ class GraphicsImage(QtWidgets.QGraphicsPixmapItem):
     def mouseMoveEvent(self, *args, **kwargs):
         super().mouseMoveEvent(*args, **kwargs)
         self.itemsGeometry["pos"] = [self.pos().x(), self.pos().y()]
+
+    # def mouseReleaseEvent(self, *args, **kwargs):
+    #     super().mouseReleaseEvent(*args, **kwargs)
+    #     self.main.imagePixmapCheck()
+
+
+
 
 
     def setScale(self, p_float):

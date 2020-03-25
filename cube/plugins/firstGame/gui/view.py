@@ -19,6 +19,7 @@ class Scene(QtWidgets.QGraphicsScene):
         :param __args:
         """
         super().__init__(*__args)
+        self.main = parent
         self.itemsGeometry = itemsGeometry
         x, y, width, height = rect
         self.ext = ext
@@ -35,7 +36,8 @@ class Scene(QtWidgets.QGraphicsScene):
 
     def addImages(self, GraphicsItemList):
         for name in GraphicsItemList:
-            self.addItem(self.GraphicsImage(self, name, self.itemsGeometry.get(name, {}), self.imgdir, self.ext))
+            item = self.GraphicsImage(self, name, self.itemsGeometry.get(name, {}), self.imgdir, self.ext, main=self.main)
+            self.addItem(item)
 
     def scaledtems(self, delta: float):
         for i in self.selectedItems():
@@ -65,6 +67,8 @@ class Scene(QtWidgets.QGraphicsScene):
     def setAllSelected(self, select):
         for i in self.items():
             i.setSelected(select)
+        self.main.imagePixmapCheck()
+
 
     def getItemsGeometry(self):
         return [x for x in self.items()]
@@ -73,9 +77,14 @@ class Scene(QtWidgets.QGraphicsScene):
         self.setAllSelected(False)
         ids = [str(t[0]) for t in names]
         for i in self.items():
-            print(type(i.name), "===")
             if i.name in ids:
                 i.setSelected(True)
+
+    # def mousePressEvent(self, *args, **kwargs):
+    #     print("####")
+    #
+    # def mouseReleaseEvent(self, QGraphicsSceneMouseEvent):
+    #     print("####")
 
 
 

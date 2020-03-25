@@ -47,7 +47,7 @@ class Main(AbcQFrame):
         self.hbox.setSpacing(1)
         sceneRect = self.cfg["sceneRect"]
         resource_path = paths.get_res_folder("cubeSerg", "images")
-        self.scene = Scene(sceneRect, GraphicsImage, resource_path, ".png", self.itemsGeometry,  self)
+        self.scene = Scene(sceneRect, GraphicsImage, resource_path, ".png", self.itemsGeometry,  parent=self)
         self.view = View(self.cfg["viewSize"])
         self.view.setScene(self.scene)
         self.hbox.addWidget(self.view, stretch=35)
@@ -77,8 +77,13 @@ class Main(AbcQFrame):
         self.tools.toolImagees.addItems(self.seqImage)
 
     def imgBtnCheck(self):
-        self.scene.selectedfromName(self.tools.toolImagees.selectedItems())
-        print(self.sender().text())
+        pass
+        # self.scene.selectedfromName(self.tools.toolImagees.selectedItems())
+
+
+    def imagePixmapCheck(self, flagClosure=False):
+        # if not flagClosure:
+            self.tools.toolImagees.selectToIndex(*[int(x.name) for x in self.scene.selectedItems()])
 
 if __name__ == '__main__':
 

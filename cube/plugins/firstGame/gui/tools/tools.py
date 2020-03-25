@@ -28,9 +28,11 @@ class Tools(QtWidgets.QFrame):
         self.tub = QtWidgets.QTabWidget()
         # self.tub.setTabPosition(QtWidgets.QTabWidget.West)
         self.tub.setMovable(True)
-        print(self.main, "main")
+
         self.tub.addTab(toolimagees.ToolAddImagesTub(parent=self.main), "AddImages")
-        self.tub.addTab(toolimagees.ToolImagesTub(parent=self.main), "Images")
+
+        self.toolImagees = toolimagees.ToolImagesTub(parent=self.main)
+        self.tub.addTab(self.toolImagees, "Images")
 
 
 

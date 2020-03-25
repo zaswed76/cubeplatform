@@ -71,12 +71,14 @@ class Main(AbcQFrame):
         print("returnGeometry")
 
     def newTen(self, ten):
-        print(self.sender().text())
         self.scene.clear()
         self.seqImage.setTen(ten)
         self.scene.addImages(self.seqImage)
+        self.tools.toolImagees.addItems(self.seqImage)
 
-
+    def imgBtnCheck(self):
+        self.scene.selectedfromName(self.tools.toolImagees.selectedItems())
+        print(self.sender().text())
 
 if __name__ == '__main__':
 

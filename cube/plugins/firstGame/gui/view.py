@@ -69,6 +69,14 @@ class Scene(QtWidgets.QGraphicsScene):
     def getItemsGeometry(self):
         return [x for x in self.items()]
 
+    def selectedfromName(self, names):
+        self.setAllSelected(False)
+        ids = [str(t[0]) for t in names]
+        for i in self.items():
+            print(type(i.name), "===")
+            if i.name in ids:
+                i.setSelected(True)
+
 
 
 class View(QtWidgets.QGraphicsView):

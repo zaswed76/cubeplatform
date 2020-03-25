@@ -11,39 +11,106 @@ class Dialog(QtWidgets.QInputDialog):
         self.setIntMinimum(0)
         self.setIntStep(10)
 
-
-
-
 class ToolImagesTub(QtWidgets.QFrame):
     def __init__(self, parent=None):
         super().__init__()
+
+        self.main = parent
+        self.box = QtWidgets.QHBoxLayout(self)
+        self.vbox = QtWidgets.QVBoxLayout()
+        self.up = QtWidgets.QPushButton("^")
+        self.down = QtWidgets.QPushButton("v")
+        self.up.clicked.connect(self._up)
+        self.down.clicked.connect(self._down)
+        self.vbox.addWidget(self.up)
+        self.vbox.addWidget(self.down)
+        self.vbox.addStretch(5)
+        self.view = _ToolImagesTub(parent=self.main)
+        self.box.addWidget(self.view)
+        self.box.addLayout(self.vbox)
+
+    def selectedItems(self):
+        return self.view.selectedItems()
+
+    def addItems(self, items_list):
+        self.view.addItems(items_list)
+
+    def _up(self):
+        sel_lst = self.selectedItems()
+        if len(sel_lst) > 1 or not sel_lst:
+            return
+        index = sel_lst[0][0]
+        if index is not None and index > 0:
+            e = self.view.items.pop(index)
+            new_index = index-1
+            self.view.items.insert(new_index, e)
+            self.view.addItems(self.view.items)
+            self.view.selectToIndex(new_index)
+
+    def _down(self):
+        sel_lst = self.selectedItems()
+        if len(sel_lst) > 1 or not sel_lst:
+            return
+        index = sel_lst[0][0]
+        if index is not None and index < len(self.view.items) -1:
+            e = self.view.items.pop(index)
+            new_index = index+1
+            self.view.items.insert(new_index, e)
+            self.view.addItems(self.view.items)
+            self.view.selectToIndex(new_index)
+
+class Btn(QtWidgets.QPushButton):
+    def __init__(self, *__args):
+
+        super().__init__(*__args)
+        self.setCheckable(True)
+        self.setStyleSheet('background: white;')
+
+
+class _ToolImagesTub(QtWidgets.QFrame):
+    def __init__(self, parent=None):
+        super().__init__()
+        self.main = parent
         self.setStyleSheet("background-color: #616163")
         self.box = QtWidgets.QVBoxLayout(self)
-        self.list = QtWidgets.QListView()
-        self.list.indexesMoved.connect(self.listItemMoved)
-        # self.list.setSelectionRectVisible(True)
-        self.list.setSpacing(6)
-        self.list.setDropIndicatorShown(True)
-        self.list.setMovement(QtWidgets.QListView.Free)
-        # self.list.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
-        self.entry = QtGui.QStandardItemModel()
-        self.list.setModel(self.entry)
-        self.box.addWidget(self.list)
 
-        for text in ["Itemname1", "Itemname2", "Itemname3", "Itemname4"]:
-            it = QtGui.QStandardItem(text)
-            it.setFont(QtGui.QFont("Helvetica", 14))
-            it.setSizeHint(QtCore.QSize(100, 30))
-            self.entry.appendRow(it)
-        # self.tub.setTabPosition(QtWidgets.QTabWidget.West)
-        #
-        # for x in range(0, 101, 10):
-        #     btn = QtWidgets.QPushButton(str(x))
-        #     btn.setFixedWidth(200)
-        #     self.tub.addTab(btn, str(x))
+        self.items = []
 
-    def listItemMoved(self):
-        print("!!!!!!!!!!")
+    def clearLayout(self):
+        while self.box.count() > 0:
+            item = self.box.takeAt(0)
+            if not item:
+                continue
+            w = item.widget()
+            if w:
+                w.deleteLater()
+
+    def addItems(self, items):
+        self.clearLayout()
+        self.group = QtWidgets.QButtonGroup()
+        self.group.setExclusive(False)
+        self.items = []
+        self.items.extend(items)
+        for i in self.items:
+            i = Btn(str(i))
+            i.toggled.connect(self.main.imgBtnCheck)
+            self.box.addWidget(i)
+            self.group.addButton(i)
+        self.box.addStretch(5)
+
+    def selectToIndex(self, index):
+        for i, e in enumerate(self.group.buttons()):
+            if i == index:
+                e.setChecked(True)
+
+    def selectedItems(self):
+        lst = []
+        for index, e in enumerate(self.group.buttons()):
+            if e.isChecked():
+                print(type(index))
+                lst.append((index, e))
+
+        return lst
 
 class ToolAddImagesTub(QtWidgets.QFrame):
     def __init__(self, parent=None, *args, **kwargs):

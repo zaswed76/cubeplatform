@@ -27,7 +27,7 @@ class GraphicsImage(QtWidgets.QGraphicsPixmapItem):
                      )
         self.setFlag(QtWidgets.QGraphicsPixmapItem.ItemIsSelectable)
 
-        print(self.itemsGeometry, "!!!!!!!")
+        # print(self.itemsGeometry, "!!!!!!!")
         self._pos = self.itemsGeometry.get("pos", (0, 0))
         self._scaled = self.itemsGeometry.get("scaled", 1.0)
         self._rotate_mod = self.itemsGeometry.get("rotate_mod", 0.0)

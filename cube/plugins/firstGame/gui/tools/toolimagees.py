@@ -29,9 +29,12 @@ class ToolImagesTub(QtWidgets.QFrame):
         self.box.addWidget(self.view)
         self.box.addLayout(self.vbox)
 
+    def userSelectedItems(self):
+        return self.view.userSelectedItems()
+
+
     def selectToIndex(self, *indexs):
-        # if not flagClosure:
-            self.view.selectToIndex(*indexs)
+        self.view.selectToIndex(*indexs)
 
     def selectedItems(self):
         return self.view.selectedItems()
@@ -70,7 +73,10 @@ class Btn(QtWidgets.QPushButton):
         self.setCheckable(True)
         self.setAutoExclusive(False)
         self.setStyleSheet('background: white;')
+        self.userChecked = False
 
+    def isUserChecked(self):
+        return self.userChecked
 
 class _ToolImagesTub(QtWidgets.QFrame):
     def __init__(self, parent=None):
@@ -98,16 +104,28 @@ class _ToolImagesTub(QtWidgets.QFrame):
         self.items.extend(items)
         for i in self.items:
             i = Btn(str(i))
-            i.toggled.connect(self.main.imgBtnCheck)
+            i.toggled.connect(self.imgBtnCheck)
             self.box.addWidget(i)
             self.group.addButton(i)
         self.box.addStretch(5)
+
+    def imgBtnCheck(self):
+        btn = self.sender()
+        btn.userChecked = not btn.userChecked
+        self.main.imgBtnCheck()
 
     def selectToIndex(self, *indexs):
         self.clearSelecteted()
         for i, e in enumerate(self.group.buttons()):
             if i in indexs:
                 e.setChecked(True)
+
+    def userSelectedItems(self):
+        lst = []
+        for index, e in enumerate(self.group.buttons()):
+            if e.isUserChecked():
+                lst.append((index, e))
+        return lst
 
     def selectedItems(self):
         lst = []

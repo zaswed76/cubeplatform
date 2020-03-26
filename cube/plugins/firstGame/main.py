@@ -77,13 +77,15 @@ class Main(AbcQFrame):
         self.tools.toolImagees.addItems(self.seqImage)
 
     def imgBtnCheck(self):
+        selected = self.tools.toolImagees.userSelectedItems()
+        self.scene.selectedfromName(selected)
+
+
+    def imagePixmapCheck(self):
         pass
-        # self.scene.selectedfromName(self.tools.toolImagees.selectedItems())
-
-
-    def imagePixmapCheck(self, flagClosure=False):
-        # if not flagClosure:
-            self.tools.toolImagees.selectToIndex(*[int(x.name) for x in self.scene.selectedItems()])
+        selected = [int(x.name) for x in self.scene.selectedItems()]
+        print(selected)
+        # self.tools.toolImagees.selectToIndex(*selected)
 
 if __name__ == '__main__':
 

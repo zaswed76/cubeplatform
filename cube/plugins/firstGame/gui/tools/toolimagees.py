@@ -4,12 +4,38 @@ import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
 from functools import partial
 
+
+class VBoxLayout(QtWidgets.QBoxLayout):
+    def __init__(self, direction, parent, **kwargs):
+        super().__init__(direction, parent)
+        self.setDirection(direction)
+        self.setParent(parent)
+        contentMargin = kwargs.get("content_margin", (0, 0, 0, 0))
+        spacing = kwargs.get("spacing", 0)
+        self.setContentsMargins(*contentMargin)
+        self.setSpacing(spacing)
+
+
 class Dialog(QtWidgets.QInputDialog):
     def __init__(self):
         super().__init__()
         self.setIntMaximum(10)
         self.setIntMinimum(0)
         self.setIntStep(10)
+
+class Btn(QtWidgets.QPushButton):
+    def __init__(self, name, index, *__args):
+        super().__init__(*__args)
+        self.name = name
+        self.index = index
+        self.setText(name)
+        self.setCheckable(True)
+        self.setAutoExclusive(False)
+        self.setStyleSheet('background: white;')
+        self.userChecked = False
+
+    def isUserChecked(self):
+        return self.userChecked
 
 class ToolImagesTub(QtWidgets.QFrame):
     def __init__(self, parent=None):
@@ -18,16 +44,33 @@ class ToolImagesTub(QtWidgets.QFrame):
         self.main = parent
         self.box = QtWidgets.QHBoxLayout(self)
         self.vbox = QtWidgets.QVBoxLayout()
+
         self.up = QtWidgets.QPushButton("^")
         self.down = QtWidgets.QPushButton("v")
+        self.delBtn = QtWidgets.QPushButton("del")
+
+        self.delBtn.clicked.connect(self._delBtn)
         self.up.clicked.connect(self._up)
         self.down.clicked.connect(self._down)
         self.vbox.addWidget(self.up)
         self.vbox.addWidget(self.down)
+        self.vbox.addWidget(self.delBtn)
         self.vbox.addStretch(5)
         self.view = _ToolImagesTub(parent=self.main)
         self.box.addWidget(self.view)
         self.box.addLayout(self.vbox)
+
+    def selectedItems(self):
+        return self.view.selectedItems()
+
+    def selectedIndexes(self):
+        return self.view.selectedIndexes()
+
+    def selectedNames(self):
+        return self.view.selectedNames()
+
+    def setLogicModel(self, logic_model):
+        self.logicModel = logic_model
 
     def userSelectedItems(self):
         return self.view.userSelectedItems()
@@ -39,14 +82,17 @@ class ToolImagesTub(QtWidgets.QFrame):
     def selectedItems(self):
         return self.view.selectedItems()
 
-    def addItems(self, items_list):
-        self.view.addItems(items_list)
+    def addItems(self):
+        self.view.addItems(self.logicModel)
 
-    def _up(self):
-        sel_lst = self.selectedItems()
+    def _delBtn(self):
+        self.main.delBtn()
+
+    def _down(self):
+        sel_lst = self.selectedIndexes()
         if len(sel_lst) > 1 or not sel_lst:
             return
-        index = sel_lst[0][0]
+        index = sel_lst[0]
         if index is not None and index > 0:
             e = self.view.items.pop(index)
             new_index = index-1
@@ -54,11 +100,12 @@ class ToolImagesTub(QtWidgets.QFrame):
             self.view.addItems(self.view.items)
             self.view.selectToIndex(new_index)
 
-    def _down(self):
-        sel_lst = self.selectedItems()
+
+    def _up(self):
+        sel_lst = self.selectedIndexes()
         if len(sel_lst) > 1 or not sel_lst:
             return
-        index = sel_lst[0][0]
+        index = sel_lst[0]
         if index is not None and index < len(self.view.items) -1:
             e = self.view.items.pop(index)
             new_index = index+1
@@ -66,25 +113,15 @@ class ToolImagesTub(QtWidgets.QFrame):
             self.view.addItems(self.view.items)
             self.view.selectToIndex(new_index)
 
-class Btn(QtWidgets.QPushButton):
-    def __init__(self, *__args):
 
-        super().__init__(*__args)
-        self.setCheckable(True)
-        self.setAutoExclusive(False)
-        self.setStyleSheet('background: white;')
-        self.userChecked = False
-
-    def isUserChecked(self):
-        return self.userChecked
 
 class _ToolImagesTub(QtWidgets.QFrame):
     def __init__(self, parent=None):
         super().__init__()
         self.main = parent
         self.setStyleSheet("background-color: #616163")
-        self.box = QtWidgets.QVBoxLayout(self)
-
+        self.box = VBoxLayout(QtWidgets.QBoxLayout.BottomToTop, self)
+        self.group = QtWidgets.QButtonGroup()
         self.items = []
 
     def clearLayout(self):
@@ -102,12 +139,13 @@ class _ToolImagesTub(QtWidgets.QFrame):
         self.group.setExclusive(False)
         self.items = []
         self.items.extend(items)
-        for i in self.items:
-            i = Btn(str(i))
-            i.toggled.connect(self.imgBtnCheck)
-            self.box.addWidget(i)
-            self.group.addButton(i)
         self.box.addStretch(5)
+        for index, name in enumerate(self.items):
+            btn = Btn(name, index)
+            btn.toggled.connect(self.imgBtnCheck)
+            self.box.addWidget(btn)
+            self.group.addButton(btn)
+
 
     def imgBtnCheck(self):
         btn = self.sender()
@@ -128,11 +166,14 @@ class _ToolImagesTub(QtWidgets.QFrame):
         return lst
 
     def selectedItems(self):
-        lst = []
-        for index, e in enumerate(self.group.buttons()):
-            if e.isChecked():
-                lst.append((index, e))
-        return lst
+        return [x for x in self.group.buttons() if x.isChecked()]
+
+    def selectedIndexes(self):
+        return [x.index for x in self.group.buttons() if x.isChecked()]
+
+    def selectedNames(self):
+        return [x.name for x in self.group.buttons() if x.isChecked()]
+
 
     def clearSelecteted(self):
         for e in self.group.buttons():

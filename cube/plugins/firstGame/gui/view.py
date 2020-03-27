@@ -34,8 +34,12 @@ class Scene(QtWidgets.QGraphicsScene):
         }
         self.keyMap["ctrl"] = control
 
-    def addImages(self, GraphicsItemList):
-        for name in GraphicsItemList:
+    def setLogicModel(self, logic_model):
+        self.logicModel = logic_model
+
+    def updateItems(self):
+        self.clear()
+        for name in self.logicModel:
             item = self.GraphicsImage(self, name, self.itemsGeometry.get(name, {}), self.imgdir, self.ext, main=self.main)
             self.addItem(item)
 
@@ -94,6 +98,8 @@ class View(QtWidgets.QGraphicsView):
         self.setObjectName("firstGame_View")
         width, height = size
         self.setFixedSize(width+4, height+4)
+        self.setDragMode(QtWidgets.QGraphicsView.RubberBandDrag)
+        # self.setRenderHint(QtGui.QPainter.Antialiasing, True)
 
 
 if __name__ == '__main__':

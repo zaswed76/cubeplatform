@@ -41,7 +41,6 @@ class Main(AbcQFrame):
 
         self.itemsGeometry = config.Config(str(Path(paths.PLUGINS_FOLDER) / "firstGame" / "itemGeometry.yaml"))
 
-
         self.hbox = QtWidgets.QHBoxLayout(self)
         self.hbox.setContentsMargins(0, 0, 0, 0)
         self.hbox.setSpacing(1)
@@ -58,9 +57,16 @@ class Main(AbcQFrame):
 
         self.hbox.addWidget(self.tools, stretch=5)
 
-        self.seqImage = seqImage.Sequence()
+        self.logicModel = seqImage.Sequence()
+        self.scene.setLogicModel(self.logicModel)
+        self.tools.toolImagees.setLogicModel(self.logicModel)
 
 
+    def delBtn(self):
+        items = self.tools.toolImagees.selectedNames()
+        self.logicModel.removeItems(items)
+        self.tools.toolImagees.addItems()
+        self.scene.updateItems()
 
     def saveGeometry(self):
         for i in self.scene.getItemsGeometry():
@@ -72,20 +78,21 @@ class Main(AbcQFrame):
 
     def newTen(self, ten):
         self.scene.clear()
-        self.seqImage.setTen(ten)
-        self.scene.addImages(self.seqImage)
-        self.tools.toolImagees.addItems(self.seqImage)
+        self.logicModel.setTen(ten)
+        self.scene.updateItems()
+        self.tools.toolImagees.addItems()
 
     def imgBtnCheck(self):
-        selected = self.tools.toolImagees.userSelectedItems()
-        self.scene.selectedfromName(selected)
+        pass
+        # selected = self.tools.toolImagees.userSelectedItems()
+        # self.scene.selectedfromName(selected)
 
 
     def imagePixmapCheck(self):
         pass
-        selected = [int(x.name) for x in self.scene.selectedItems()]
-        print(selected)
-        # self.tools.toolImagees.selectToIndex(*selected)
+        # selected = [int(x.name) for x in self.scene.selectedItems()]
+        # print(selected)
+        # # self.tools.toolImagees.selectToIndex(*selected)
 
 if __name__ == '__main__':
 

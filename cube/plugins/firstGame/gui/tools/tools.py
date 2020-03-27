@@ -41,10 +41,15 @@ class Tools(QtWidgets.QFrame):
         self.saveBtn.clicked.connect(self._controller.saveBtn)
         self.returnBtn = QtWidgets.QPushButton("return")
         self.returnBtn.clicked.connect(self._controller.returnBtn)
+
+
+
         self.box.addWidget(self.saveBtn)
         self.box.addWidget(self.returnBtn)
         # self.box.addStretch(1)
         self.box.addWidget(self.tub)
+
+
 
     def setController(self, controller):
         self._controller = controller

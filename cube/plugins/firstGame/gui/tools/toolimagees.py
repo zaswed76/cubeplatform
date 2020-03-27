@@ -56,7 +56,7 @@ class ToolImagesTub(QtWidgets.QFrame):
         self.vbox.addWidget(self.down)
         self.vbox.addWidget(self.delBtn)
         self.vbox.addStretch(5)
-        self.view = _ToolImagesTub(parent=self.main)
+        self.view = BtnImagePanel(parent=self.main)
         self.box.addWidget(self.view)
         self.box.addLayout(self.vbox)
 
@@ -79,43 +79,23 @@ class ToolImagesTub(QtWidgets.QFrame):
     def selectToIndex(self, *indexs):
         self.view.selectToIndex(*indexs)
 
-    def selectedItems(self):
-        return self.view.selectedItems()
-
-    def addItems(self):
+    def updateItems(self):
         self.view.addItems(self.logicModel)
 
     def _delBtn(self):
-        self.main.delBtn()
+        self.main.toolImagesController.delBtns()
 
     def _down(self):
-        sel_lst = self.selectedIndexes()
-        if len(sel_lst) > 1 or not sel_lst:
-            return
-        index = sel_lst[0]
-        if index is not None and index > 0:
-            e = self.view.items.pop(index)
-            new_index = index-1
-            self.view.items.insert(new_index, e)
-            self.view.addItems(self.view.items)
-            self.view.selectToIndex(new_index)
+        self.main.toolImagesController.downBtn()
 
 
     def _up(self):
-        sel_lst = self.selectedIndexes()
-        if len(sel_lst) > 1 or not sel_lst:
-            return
-        index = sel_lst[0]
-        if index is not None and index < len(self.view.items) -1:
-            e = self.view.items.pop(index)
-            new_index = index+1
-            self.view.items.insert(new_index, e)
-            self.view.addItems(self.view.items)
-            self.view.selectToIndex(new_index)
+        self.main.toolImagesController.upBtn()
 
 
 
-class _ToolImagesTub(QtWidgets.QFrame):
+
+class BtnImagePanel(QtWidgets.QFrame):
     def __init__(self, parent=None):
         super().__init__()
         self.main = parent
@@ -137,10 +117,8 @@ class _ToolImagesTub(QtWidgets.QFrame):
         self.clearLayout()
         self.group = QtWidgets.QButtonGroup()
         self.group.setExclusive(False)
-        self.items = []
-        self.items.extend(items)
         self.box.addStretch(5)
-        for index, name in enumerate(self.items):
+        for index, name in enumerate(items):
             btn = Btn(name, index)
             btn.toggled.connect(self.imgBtnCheck)
             self.box.addWidget(btn)

@@ -7,7 +7,7 @@ import config
 from plugins.abcPlugin import AbcQFrame
 from plugins.firstGame.gui.view import View, Scene
 from plugins.firstGame.gui.imageItem import GraphicsImage
-from plugins.firstGame.gui.tools import tools
+from plugins.firstGame.gui.tools import tools, toolimagesController
 from plugins.firstGame.core import seqImage
 import paths
 from PyQt5.QtCore import *
@@ -53,20 +53,17 @@ class Main(AbcQFrame):
 
         self.toolsController = tools.ToolsController(self)
         self.tools = tools.Tools(self.toolsController, parent=self)
-        # self.tools.setController(self.toolsController)
-
         self.hbox.addWidget(self.tools, stretch=5)
+
+
+        self.toolImagesController = toolimagesController.ToolImagesController(self, self.tools.toolImagees)
 
         self.logicModel = seqImage.Sequence()
         self.scene.setLogicModel(self.logicModel)
         self.tools.toolImagees.setLogicModel(self.logicModel)
 
 
-    def delBtn(self):
-        items = self.tools.toolImagees.selectedNames()
-        self.logicModel.removeItems(items)
-        self.tools.toolImagees.addItems()
-        self.scene.updateItems()
+
 
     def saveGeometry(self):
         for i in self.scene.getItemsGeometry():
@@ -80,7 +77,7 @@ class Main(AbcQFrame):
         self.scene.clear()
         self.logicModel.setTen(ten)
         self.scene.updateItems()
-        self.tools.toolImagees.addItems()
+        self.tools.toolImagees.updateItems()
 
     def imgBtnCheck(self):
         pass

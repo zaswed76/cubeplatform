@@ -15,6 +15,15 @@ class ToolsController(QtCore.QObject):
     def returnBtn(self):
         self.main.returnGeometry()
 
+class BottomAddPanel(QtWidgets.QFrame):
+    def __init__(self):
+        super().__init__()
+        self.setFixedHeight(25)
+        self.setStyleSheet("background-color: green")
+        #
+        # self.delBtn = QtWidgets.QPushButton("del")
+        #
+        # self.delBtn.clicked.connect(self._delBtn)
 class Tools(QtWidgets.QFrame):
     def __init__(self, controller, parent,  *args, **kwargs):
 
@@ -28,11 +37,10 @@ class Tools(QtWidgets.QFrame):
         self.tub = QtWidgets.QTabWidget()
         # self.tub.setTabPosition(QtWidgets.QTabWidget.West)
         self.tub.setMovable(True)
-
-        self.tub.addTab(toolimagees.ToolAddImagesTub(parent=self.main), "AddImages")
-
         self.toolImagees = toolimagees.ToolImagesTub(parent=self.main)
         self.tub.addTab(self.toolImagees, "Images")
+
+
 
 
 
@@ -48,6 +56,9 @@ class Tools(QtWidgets.QFrame):
         self.box.addWidget(self.returnBtn)
         # self.box.addStretch(1)
         self.box.addWidget(self.tub)
+
+        self.bottomAddPanel = BottomAddPanel()
+        self.box.addWidget(self.bottomAddPanel)
 
 
 

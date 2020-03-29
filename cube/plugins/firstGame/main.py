@@ -9,6 +9,7 @@ from plugins.firstGame.gui.view import View, Scene
 from plugins.firstGame.gui.imageItem import GraphicsImage
 from plugins.firstGame.gui.tools import tools, toolimagesController
 from plugins.firstGame.core import seqImage
+
 import paths
 from PyQt5.QtCore import *
 
@@ -49,6 +50,7 @@ class Main(AbcQFrame):
         self.scene = Scene(sceneRect, GraphicsImage, resource_path, ".png", self.itemsGeometry,  parent=self)
         self.view = View(self.cfg["viewSize"])
         self.view.setScene(self.scene)
+        self.hbox.addStretch(35)
         self.hbox.addWidget(self.view, stretch=35)
 
         self.toolsController = tools.ToolsController(self)
@@ -61,6 +63,7 @@ class Main(AbcQFrame):
         self.logicModel = seqImage.Sequence()
         self.scene.setLogicModel(self.logicModel)
         self.tools.toolImagees.setLogicModel(self.logicModel)
+        self.hbox.addStretch(35)
 
 
 

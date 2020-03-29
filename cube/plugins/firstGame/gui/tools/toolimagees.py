@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
 import sys
+
+import os
 from PyQt5 import QtWidgets, QtCore, QtGui
 from functools import partial
-
+from plugins.firstGame import gamepaths
 
 class VBoxLayout(QtWidgets.QBoxLayout):
     def __init__(self, direction, parent, **kwargs):
@@ -33,54 +35,92 @@ class Btn(QtWidgets.QPushButton):
         self.setAutoExclusive(False)
         self.setStyleSheet('background: white;')
         self.userChecked = False
-
     def isUserChecked(self):
         return self.userChecked
+
+class RightFrame(QtWidgets.QFrame):
+    def __init__(self):
+        super().__init__()
+        # self.setMinimumWidth(10)
+        self.box = QtWidgets.QVBoxLayout(self)
+        self.box.setContentsMargins(0, 0, 0, 0)
+
+        self.up = BtnResize("up")
+        self.up.setIcon(QtGui.QIcon(os.path.join(gamepaths.ICONS, "up.png")))
+        self.down = BtnResize("down")
+        self.down.setIcon(QtGui.QIcon(os.path.join(gamepaths.ICONS, "down.png")))
+
+        # self.up.clicked.connect(self._up)
+        # self.down.clicked.connect(self._down)
+        self.addWidget(self.up)
+        self.addWidget(self.down)
+        self.addStretch(5)
+
+    def addWidget(self, widget):
+        self.box.addWidget(widget)
+    def addStretch(self, s):
+        self.box.addStretch(s)
+
+
+
+class BtnResize(QtWidgets.QPushButton):
+    def __init__(self, name, *__args):
+        super().__init__(*__args)
+        self.name = name
+        self.setText(self.name)
+        self.setMinimumWidth(30)
+        self.setMaximumWidth(80)
+        self.setStyleSheet("Text-align:left")
+
+    def resizeEvent(self, e):
+        w = e.size().width()
+        if w < 50:
+            self.setText("")
+            self.setStyleSheet("Text-align:center")
+        else:
+
+            self.setText(self.name)
+            self.setStyleSheet("Text-align:left")
 
 class ToolImagesTub(QtWidgets.QFrame):
     def __init__(self, parent=None):
         super().__init__()
 
         self.main = parent
-        self.box = QtWidgets.QHBoxLayout(self)
-        self.vbox = QtWidgets.QVBoxLayout()
+        self.basebox = QtWidgets.QVBoxLayout(self)
+        self.splitter = QtWidgets.QSplitter()
 
-        self.up = QtWidgets.QPushButton("^")
-        self.down = QtWidgets.QPushButton("v")
-        self.delBtn = QtWidgets.QPushButton("del")
+        self.splitter.setHandleWidth(2)
+        self.splitter.setChildrenCollapsible(False)
 
-        self.delBtn.clicked.connect(self._delBtn)
-        self.up.clicked.connect(self._up)
-        self.down.clicked.connect(self._down)
-        self.vbox.addWidget(self.up)
-        self.vbox.addWidget(self.down)
-        self.vbox.addWidget(self.delBtn)
-        self.vbox.addStretch(5)
-        self.view = BtnImagePanel(parent=self.main)
-        self.box.addWidget(self.view)
-        self.box.addLayout(self.vbox)
+        self.basebox.addWidget(self.splitter)
+        self.rightFrame = RightFrame()
+        self.leftFrame = BtnImagePanel(parent=self.main)
+        self.splitter.addWidget(self.leftFrame)
+        self.splitter.addWidget(self.rightFrame)
+
 
     def selectedItems(self):
-        return self.view.selectedItems()
+        return self.leftFrame.selectedItems()
 
     def selectedIndexes(self):
-        return self.view.selectedIndexes()
+        return self.leftFrame.selectedIndexes()
 
     def selectedNames(self):
-        return self.view.selectedNames()
+        return self.leftFrame.selectedNames()
 
     def setLogicModel(self, logic_model):
         self.logicModel = logic_model
 
     def userSelectedItems(self):
-        return self.view.userSelectedItems()
+        return self.leftFrame.userSelectedItems()
 
 
     def selectToIndex(self, *indexs):
-        self.view.selectToIndex(*indexs)
+        self.leftFrame.selectToIndex(*indexs)
 
     def updateItems(self):
-        self.view.addItems(self.logicModel)
+        self.leftFrame.addItems(self.logicModel)
 
     def _delBtn(self):
         self.main.toolImagesController.delBtns()
@@ -99,7 +139,9 @@ class BtnImagePanel(QtWidgets.QFrame):
     def __init__(self, parent=None):
         super().__init__()
         self.main = parent
-        self.setStyleSheet("background-color: #616163")
+        self.setStyleSheet("background-color: grey")
+        self.setMinimumWidth(70)
+        # self.setMaximumWidth(100)
         self.box = VBoxLayout(QtWidgets.QBoxLayout.BottomToTop, self)
         self.group = QtWidgets.QButtonGroup()
         self.items = []

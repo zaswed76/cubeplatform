@@ -16,8 +16,6 @@ PLUGINS_MANIFEST = os.path.join(ROOT, "plugins", "manifest.yaml")
 DOC_FOLDER = Path(ROOT).parent
 DOC_INDEX = os.path.join(DOC_FOLDER, "doc/build/html/index.html")
 GAME_RESOURCES = os.path.join(ROOT, "resource/gameresource")
-print(GAME_RESOURCES)
-
 
 def get_res_folder(*args):
     return os.path.join(GAME_RESOURCES, *args)

@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+
+
+
 import sys
 
 import os
@@ -211,11 +214,7 @@ class ToolAddImagesTub(QtWidgets.QFrame):
         self.box.addWidget(self.newTen)
         self.box.addStretch(1)
 
-    def showDialog(self):
-        d = Dialog()
-        i, ok = d.getInt(self, "a", "b", 0, 0, 90, 10)
-        if ok:
-            self.main.newTen(i)
+
 
 
 

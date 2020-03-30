@@ -4,16 +4,15 @@ import sys
 from PyQt5 import QtWidgets, QtCore
 from plugins.firstGame.gui.tools import toolimagees
 
-class ToolsController(QtCore.QObject):
-    def __init__(self, parent):
+class Dialog(QtWidgets.QInputDialog):
+    def __init__(self):
         super().__init__()
-        self.main = parent
+        self.setIntMaximum(10)
+        self.setIntMinimum(0)
+        self.setIntStep(10)
 
-    def saveBtn(self):
-        self.main.saveGeometry()
 
-    def returnBtn(self):
-        self.main.returnGeometry()
+
 
 class BottomBtn(QtWidgets.QPushButton):
     def __init__(self, name, *__args):
@@ -24,8 +23,10 @@ class BottomBtn(QtWidgets.QPushButton):
 
 
 class BottomAddPanel(QtWidgets.QFrame):
-    def __init__(self):
+    def __init__(self, controller):
         super().__init__()
+
+        self.controller = controller
         self.setFixedHeight(25)
         self.setStyleSheet("background-color: #E1E1E1")
         self.hbox = QtWidgets.QHBoxLayout(self)
@@ -35,11 +36,18 @@ class BottomAddPanel(QtWidgets.QFrame):
         self.delBtn = BottomBtn("firstGame_delBtn")
         self.addFilesBtn = BottomBtn("firstGame_addFilesBtn")
         self.addTenBtn = BottomBtn("firstGame_addTenBtn")
+        self.addTenBtn.clicked.connect(self.controller.addTen)
         self.hbox.addStretch(5)
         self.hbox.addWidget(self.addFilesBtn)
         self.hbox.addWidget(self.addTenBtn)
         self.hbox.addWidget(self.delBtn)
 
+    def showDialog(self):
+        d = Dialog()
+        i, ok = d.getInt(self, "a", "b", 0, 0, 90, 10)
+        if ok:
+            return i
+        else: return None
 
 class RightFrame(QtWidgets.QFrame):
     def __init__(self, *args, **kwargs):
@@ -54,41 +62,39 @@ class RightFrame(QtWidgets.QFrame):
 
 
 class Tools(QtWidgets.QFrame):
-    def __init__(self, controller, parent,  *args, **kwargs):
+    def __init__(self, parent,  *args, **kwargs):
 
         super().__init__(parent, *args, **kwargs)
         self.main = parent
         self.setObjectName("firstGame_tools")
-        self._controller = controller
+        self._controller = None
         self.box = QtWidgets.QVBoxLayout(self)
         self.box.setContentsMargins(0, 0, 0, 0)
         self.box.setSpacing(1)
+
+
+
+
+
+    def initTubWidget(self):
         self.tub = QtWidgets.QTabWidget()
-        # self.tub.setTabPosition(QtWidgets.QTabWidget.West)
         self.tub.setMovable(True)
         self.toolImagees = toolimagees.ToolImagesTub(parent=self.main)
         self.tub.addTab(self.toolImagees, "Images")
+        self.box.insertWidget(2, self.tub)
 
+    def initBottomPanel(self):
+        self.bottomAddPanel = BottomAddPanel(self._controller)
+        self.box.insertWidget(3, self.bottomAddPanel)
 
-
-
-
+    def initSaveReturnBtns(self):
         self.saveBtn = QtWidgets.QPushButton("save")
         self.saveBtn.setFixedWidth(200)
         self.saveBtn.clicked.connect(self._controller.saveBtn)
         self.returnBtn = QtWidgets.QPushButton("return")
         self.returnBtn.clicked.connect(self._controller.returnBtn)
-
-
-
-        self.box.addWidget(self.saveBtn)
-        self.box.addWidget(self.returnBtn)
-        # self.box.addStretch(1)
-        self.box.addWidget(self.tub)
-
-        self.bottomAddPanel = BottomAddPanel()
-        self.box.addWidget(self.bottomAddPanel)
-
+        self.box.insertWidget(0, self.saveBtn)
+        self.box.insertWidget(1, self.returnBtn)
 
 
     def setController(self, controller):

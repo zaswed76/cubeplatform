@@ -11,6 +11,20 @@ class ToolImagesController():
         self.tool_widget = tool_widget
         self.main = main
 
+    def saveBtn(self):
+        self.main.saveGeometry()
+
+    def returnBtn(self):
+        self.main.returnGeometry()
+
+    def addTen(self, ten):
+        ten = self.main.tools.bottomAddPanel.showDialog()
+        if ten is not None:
+            self.main.scene.clear()
+            self.main.logicModel.setTen(ten)
+            self.main.scene.updateItems()
+            self.main.tools.toolImagees.updateItems()
+
     def delBtns(self):
         items = self.tool_widget.selectedNames()
         self.main.logicModel.removeItems(items)

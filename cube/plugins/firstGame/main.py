@@ -72,8 +72,14 @@ class Main(AbcQFrame):
         self.view.setScene(self.scene)
 
         self.rightFrame = tools.RightFrame()
-        self.toolsController = tools.ToolsController(self)
-        self.tools = tools.Tools(self.toolsController, parent=self)
+
+        self.tools = tools.Tools(parent=self)
+        self.tools.initTubWidget()
+        self.toolImagesController = toolimagesController.ToolImagesController(self, self.tools.toolImagees)
+        self.tools.setController(self.toolImagesController)
+        self.tools.initSaveReturnBtns()
+        self.tools.initBottomPanel()
+
         self.rightFrame.addWidget(self.tools)
         self.rightFrame.addStretch(100)
 
@@ -84,6 +90,10 @@ class Main(AbcQFrame):
         self.hbox_2.addWidget(self.rightFrame)
 
 
+
+        self.logicModel = seqImage.Sequence()
+        self.scene.setLogicModel(self.logicModel)
+        self.tools.toolImagees.setLogicModel(self.logicModel)
 
         #
         # self.hbox = QtWidgets.QHBoxLayout(self)
@@ -120,11 +130,7 @@ class Main(AbcQFrame):
     def returnGeometry(self):
         print("returnGeometry")
 
-    def newTen(self, ten):
-        self.scene.clear()
-        self.logicModel.setTen(ten)
-        self.scene.updateItems()
-        self.tools.toolImagees.updateItems()
+
 
     def imgBtnCheck(self):
         pass

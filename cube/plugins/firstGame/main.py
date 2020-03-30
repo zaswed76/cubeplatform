@@ -7,7 +7,8 @@ import config
 from plugins.abcPlugin import AbcQFrame
 from plugins.firstGame.gui.view import View, Scene
 from plugins.firstGame.gui.imageItem import GraphicsImage
-from plugins.firstGame.gui.tools import tools, toolimagesController
+from plugins.firstGame.gui.tools import (tools, toolimagesController,
+                                         leftFrame, topFrame, bottomFrame)
 from plugins.firstGame.core import seqImage
 
 import paths
@@ -42,28 +43,67 @@ class Main(AbcQFrame):
 
         self.itemsGeometry = config.Config(str(Path(paths.PLUGINS_FOLDER) / "firstGame" / "itemGeometry.yaml"))
 
-        self.hbox = QtWidgets.QHBoxLayout(self)
-        self.hbox.setContentsMargins(0, 0, 0, 0)
-        self.hbox.setSpacing(1)
+        self.vbox_1 = QtWidgets.QVBoxLayout(self)
+        self.vbox_1.setContentsMargins(0, 0, 0, 0)
+        self.vbox_1.setSpacing(1)
+        self.topFrame = topFrame.TopFrame()
+        self.midleFrame = QtWidgets.QFrame()
+        self.bottomFrame = bottomFrame.BottomFrame()
+        # self.vbox_1.addStretch(100)
+        self.vbox_1.addWidget(self.topFrame)
+        self.vbox_1.addWidget(self.midleFrame)
+        self.vbox_1.addWidget(self.bottomFrame)
+        # self.vbox_1.addStretch(100)
+
+        self.hbox_2 = QtWidgets.QHBoxLayout(self.midleFrame)
+
+        self.leftFrame = leftFrame.LeftFrame()
+
+        # scene
+
         sceneRect = self.cfg["sceneRect"]
         resource_path = paths.get_res_folder("cubeSerg", "images")
         self.scene = Scene(sceneRect, GraphicsImage, resource_path, ".png", self.itemsGeometry,  parent=self)
         self.view = View(self.cfg["viewSize"])
         self.view.setScene(self.scene)
-        self.hbox.addStretch(35)
-        self.hbox.addWidget(self.view, stretch=35)
 
+        self.rightFrame = tools.RightFrame()
         self.toolsController = tools.ToolsController(self)
         self.tools = tools.Tools(self.toolsController, parent=self)
-        self.hbox.addWidget(self.tools, stretch=5)
+        self.rightFrame.addWidget(self.tools)
+        self.rightFrame.addStretch(100)
 
 
-        self.toolImagesController = toolimagesController.ToolImagesController(self, self.tools.toolImagees)
 
-        self.logicModel = seqImage.Sequence()
-        self.scene.setLogicModel(self.logicModel)
-        self.tools.toolImagees.setLogicModel(self.logicModel)
-        self.hbox.addStretch(35)
+        self.hbox_2.addWidget(self.leftFrame)
+        self.hbox_2.addWidget(self.view)
+        self.hbox_2.addWidget(self.rightFrame)
+
+
+
+        #
+        # self.hbox = QtWidgets.QHBoxLayout(self)
+        # self.hbox.setContentsMargins(0, 0, 0, 0)
+        # self.hbox.setSpacing(1)
+        # sceneRect = self.cfg["sceneRect"]
+        # resource_path = paths.get_res_folder("cubeSerg", "images")
+        # self.scene = Scene(sceneRect, GraphicsImage, resource_path, ".png", self.itemsGeometry,  parent=self)
+        # self.view = View(self.cfg["viewSize"])
+        # self.view.setScene(self.scene)
+        # self.hbox.addStretch(35)
+        # self.hbox.addWidget(self.view, stretch=35)
+        #
+        # self.toolsController = tools.ToolsController(self)
+        # self.tools = tools.Tools(self.toolsController, parent=self)
+        # self.hbox.addWidget(self.tools, stretch=5)
+        #
+        #
+        # self.toolImagesController = toolimagesController.ToolImagesController(self, self.tools.toolImagees)
+        #
+        # self.logicModel = seqImage.Sequence()
+        # self.scene.setLogicModel(self.logicModel)
+        # self.tools.toolImagees.setLogicModel(self.logicModel)
+        # self.hbox.addStretch(35)
 
 
 

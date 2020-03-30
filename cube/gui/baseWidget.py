@@ -2,12 +2,22 @@
 
 import sys
 from PyQt5.QtCore import Qt
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore, QtGui
 from gui.tool.toolpanel import ToolPanel as Tool
 from gui.tool.settings.settingsWidget import SettingsWidget
 from gui.tool.homewidget.homeWidget import HomeWidget
 from gui import workStackWidget
 
+class SepBtn(QtWidgets.QPushButton):
+    def __init__(self):
+        super().__init__()
+        self.setFixedWidth(10)
+        # self.setMinimumHeight(500)
+        self.setIcon(QtGui.QIcon("./resource/icons/abc/leftsephide.png"))
+        self.setIconSize(QtCore.QSize(10, 10))
+        self.setSizePolicy(
+            QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                                  QtWidgets.QSizePolicy.Expanding))
 
 class BaseWidget(QtWidgets.QFrame):
     def __init__(self, parent, cfg):
@@ -29,14 +39,33 @@ class BaseWidget(QtWidgets.QFrame):
         self.base_box.setContentsMargins(0, 0, 0, 0)
         self.left_box = QtWidgets.QVBoxLayout()
         self.center_box = QtWidgets.QHBoxLayout()
+
         self.base_box.addLayout(self.left_box)
         # ---- tool -------
+
+
+
         self.tool = Tool(self)
         self.tool.setVisible(self.tool_visible)
         self.left_box.addWidget(self.tool)
 
+        self.separator = QtWidgets.QFrame()
+        self.separator.setStyleSheet("background-color: #D4D4D4")
+        self.setMinimumWidth(8)
+
+        self.vboxSeparator = QtWidgets.QVBoxLayout(self.separator)
+        self.sepBtn = SepBtn()
+        self.sepBtn.clicked.connect(self.leftPanelVisible)
+
+        self.vboxSeparator.addWidget(self.sepBtn)
+        self.vboxSeparator.setContentsMargins(0, 0, 0, 0)
+        self.vboxSeparator.setSpacing(0)
+        self.base_box.addWidget(self.separator)
+
+
         # ---- workStackWidget -------
         self.workStackWidget = workStackWidget.WorkStackWidget()
+        # self.workStackWidget.setFixedWidth(500)
         self.workStackWidget.setSizePolicy(
             QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding,
                                   QtWidgets.QSizePolicy.Expanding))
@@ -80,11 +109,17 @@ class BaseWidget(QtWidgets.QFrame):
         self.main.close()
 
 
+    def leftPanelVisible(self):
+        self.tool_visible = not self.tool_visible
+        self.tool.setVisible(self.tool_visible)
+        if self.tool_visible:
+            self.sepBtn.setIcon(QtGui.QIcon("./resource/icons/abc/leftsephide.png"))
+        else:
+            self.sepBtn.setIcon(QtGui.QIcon("./resource/icons/abc/rightsephide.png"))
 
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_F12:
-            self.tool_visible = not self.tool_visible
-            self.tool.setVisible(self.tool_visible)
+            self.leftPanelVisible()
 
         elif e.key() == Qt.Key_Escape:
             if not self.tool_visible:

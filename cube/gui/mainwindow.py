@@ -37,6 +37,7 @@ class MainWindow(QtWidgets.QFrame):
         self.box.addWidget(self.baseWidget)
 
 
+
     def closeEvent(self, event):
         self.cfg["screen_size"] = [self.size().width(), self.size().height()]
         self.cfg.save()

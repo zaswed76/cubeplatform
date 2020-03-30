@@ -18,6 +18,7 @@ class ToolPanel(QtWidgets.QFrame):
         :param cfg:
         """
         super().__init__()
+        self.setFixedWidth(50)
 
 
         self.cfg = cfg

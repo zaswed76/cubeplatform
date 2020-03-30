@@ -6,6 +6,7 @@ QFrame#main {
 }
 
 
+
 QFrame#work_frame {
     /*background: red;*/
     background-color: #bdbdbd;
@@ -24,4 +25,8 @@ QPushButton#settings_btn {
 QPushButton#home_btn {
     border-image: url("./resource/icons/abc/home.png");
 
+}
+
+SepBtn {
+    border: none;
 }

@@ -24,6 +24,17 @@ class BottomAddPanel(QtWidgets.QFrame):
         # self.delBtn = QtWidgets.QPushButton("del")
         #
         # self.delBtn.clicked.connect(self._delBtn)
+
+class RightFrame(QtWidgets.QFrame):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.box = QtWidgets.QHBoxLayout(self)
+
+    def addWidget(self, w): self.box.addWidget(w)
+    def addStretch(self, s): self.box.addStretch(s)
+
+
+
 class Tools(QtWidgets.QFrame):
     def __init__(self, controller, parent,  *args, **kwargs):
 

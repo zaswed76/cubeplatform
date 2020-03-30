@@ -15,20 +15,38 @@ class ToolsController(QtCore.QObject):
     def returnBtn(self):
         self.main.returnGeometry()
 
+class BottomBtn(QtWidgets.QPushButton):
+    def __init__(self, name, *__args):
+        super().__init__(*__args)
+        self.name = name
+        self.setObjectName(name)
+        self.setFixedSize(18, 18)
+
+
 class BottomAddPanel(QtWidgets.QFrame):
     def __init__(self):
         super().__init__()
         self.setFixedHeight(25)
-        self.setStyleSheet("background-color: green")
+        self.setStyleSheet("background-color: #E1E1E1")
+        self.hbox = QtWidgets.QHBoxLayout(self)
+        self.hbox.setContentsMargins(0, 0, 0, 0)
+        self.hbox.setSpacing(0)
         #
-        # self.delBtn = QtWidgets.QPushButton("del")
-        #
-        # self.delBtn.clicked.connect(self._delBtn)
+        self.delBtn = BottomBtn("firstGame_delBtn")
+        self.addFilesBtn = BottomBtn("firstGame_addFilesBtn")
+        self.addTenBtn = BottomBtn("firstGame_addTenBtn")
+        self.hbox.addStretch(5)
+        self.hbox.addWidget(self.addFilesBtn)
+        self.hbox.addWidget(self.addTenBtn)
+        self.hbox.addWidget(self.delBtn)
+
 
 class RightFrame(QtWidgets.QFrame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.box = QtWidgets.QHBoxLayout(self)
+        self.box.setContentsMargins(0, 0, 0, 0)
+        self.box.setSpacing(1)
 
     def addWidget(self, w): self.box.addWidget(w)
     def addStretch(self, s): self.box.addStretch(s)

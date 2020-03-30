@@ -139,7 +139,7 @@ class BtnImagePanel(QtWidgets.QFrame):
     def __init__(self, parent=None):
         super().__init__()
         self.main = parent
-        self.setStyleSheet("background-color: grey")
+        self.setStyleSheet("background-color: #C2C2C2")
         self.setMinimumWidth(70)
         # self.setMaximumWidth(100)
         self.box = VBoxLayout(QtWidgets.QBoxLayout.BottomToTop, self)

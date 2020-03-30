@@ -14,4 +14,18 @@ QGraphicsView#firstGame_View{
     background-color: #f3f3f3;
 }
 
+BottomBtn#firstGame_delBtn {
+        border-image: url("./plugins/firstGame/resources/icons/del.png");
+
+}
+
+BottomBtn#firstGame_addFilesBtn {
+    border-image: url("./plugins/firstGame/resources/icons/openfieles.png");
+
+}
+
+BottomBtn#firstGame_addTenBtn {
+    border-image: url("./plugins/firstGame/resources/icons/openten.png");
+
+}
 

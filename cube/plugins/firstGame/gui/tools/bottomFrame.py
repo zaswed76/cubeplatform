@@ -11,7 +11,7 @@ class BottomFrame(QtWidgets.QFrame):
 
         self.box = QtWidgets.QVBoxLayout(self)
         self.box.addStretch(100)
-        self.setStyleSheet("background-color: green")
+        self.setStyleSheet("background-color: #A8A8A8")
 
 
 if __name__ == '__main__':

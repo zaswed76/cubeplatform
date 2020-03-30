@@ -45,7 +45,7 @@ class Main(AbcQFrame):
 
         self.vbox_1 = QtWidgets.QVBoxLayout(self)
         self.vbox_1.setContentsMargins(0, 0, 0, 0)
-        self.vbox_1.setSpacing(1)
+        self.vbox_1.setSpacing(0)
         self.topFrame = topFrame.TopFrame()
         self.midleFrame = QtWidgets.QFrame()
         self.bottomFrame = bottomFrame.BottomFrame()
@@ -56,6 +56,10 @@ class Main(AbcQFrame):
         # self.vbox_1.addStretch(100)
 
         self.hbox_2 = QtWidgets.QHBoxLayout(self.midleFrame)
+
+        # self.hbox_2 = QtWidgets.QHBoxLayout(self.midleFrame)
+        self.hbox_2.setContentsMargins(0, 0, 0, 0,)
+        self.hbox_2.setSpacing(0)
 
         self.leftFrame = leftFrame.LeftFrame()
 

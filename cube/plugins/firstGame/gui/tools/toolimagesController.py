@@ -55,7 +55,15 @@ class ToolImagesController():
             self.tool_widget.toolImagees.selectToIndex(new_index)
             self.main.scene.updateItems()
 
+    def changedViewTub(self, i):
+        name = self.main.viewsTubWidget.tabText(i)
 
+        if name != "None":
+            if name:
+                print(name, type(name), "!!!")
+                logic_model = self.main.viewList.getLogicModel(int(name))
+                self.tool_widget.toolImagees.setLogicModel(logic_model)
+                self.tool_widget.toolImagees.updateItems()
 
 
 if __name__ == '__main__':

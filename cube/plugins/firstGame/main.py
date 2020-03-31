@@ -51,6 +51,14 @@ class ViewList:
     def getLogicModel(self, name):
         return self._data[name]["logicModel"]
 
+
+
+class TabWidgetScenes(QtWidgets.QTabWidget):
+    def __init__(self):
+        super().__init__()
+        self.setTabsClosable(True)
+
+
 class Main(AbcQFrame):
     def __init__(self):
         super().__init__()
@@ -66,15 +74,13 @@ class Main(AbcQFrame):
         self.topFrame = topFrame.TopFrame()
         self.midleFrame = QtWidgets.QFrame()
         self.bottomFrame = bottomFrame.BottomFrame()
-        # self.vbox_1.addStretch(100)
+
         self.vbox_1.addWidget(self.topFrame)
         self.vbox_1.addWidget(self.midleFrame)
         self.vbox_1.addWidget(self.bottomFrame)
-        # self.vbox_1.addStretch(100)
 
         self.hbox_2 = QtWidgets.QHBoxLayout(self.midleFrame)
 
-        # self.hbox_2 = QtWidgets.QHBoxLayout(self.midleFrame)
         self.hbox_2.setContentsMargins(0, 0, 0, 0,)
         self.hbox_2.setSpacing(30)
 
@@ -104,8 +110,9 @@ class Main(AbcQFrame):
         self.sceneRect = self.cfg["sceneRect"]
         self.resource_path = paths.get_res_folder("cubeSerg", "images")
 
-        self.tub = QtWidgets.QTabWidget()
-        self.tub.setMovable(True)
+        self.viewsTubWidget = TabWidgetScenes()
+        self.viewsTubWidget.currentChanged.connect(self.toolImagesController.changedViewTub)
+        self.viewsTubWidget.setMovable(True)
 
 
         self.initScene(self.currentSceneName)
@@ -115,7 +122,7 @@ class Main(AbcQFrame):
 
         self.hbox_2.addWidget(self.leftFrame)
         # self.hbox_2.addWidget(self.view)
-        self.hbox_2.addWidget(self.tub)
+        self.hbox_2.addWidget(self.viewsTubWidget)
 
         self.hbox_2.addWidget(self.rightFrame)
 
@@ -125,14 +132,30 @@ class Main(AbcQFrame):
 
 
     def initScene(self, name):
-        logicModel = seqImage.Sequence()
-        self.tools.toolImagees.setLogicModel(logicModel)
-        scene = Scene(self.sceneRect, GraphicsImage, self.resource_path, ".png", self.itemsGeometry,  parent=self)
-        scene.setLogicModel(logicModel)
-        view = View(self.cfg["viewSize"])
-        view.setScene(scene)
-        self.viewList.addScene(name, view, scene, logicModel)
-        self.tub.addTab(self.viewList.getView(name), str(name))
+        # name = str(name)
+        counttubs = self.viewsTubWidget.count()
+        if counttubs == 1 and self.viewsTubWidget.tabText(0) == "None":
+            logicModel = seqImage.Sequence()
+            self.tools.toolImagees.setLogicModel(logicModel)
+            scene = Scene(self.sceneRect, GraphicsImage, self.resource_path, ".png", self.itemsGeometry,  parent=self)
+            scene.setLogicModel(logicModel)
+            view = View(self.cfg["viewSize"])
+            view.setScene(scene)
+            self.viewList.addScene(name, view, scene, logicModel)
+            self.viewsTubWidget.clear()
+            self.viewsTubWidget.addTab(self.viewList.getView(name), str(name))
+        else:
+            logicModel = seqImage.Sequence()
+            self.tools.toolImagees.setLogicModel(logicModel)
+            scene = Scene(self.sceneRect, GraphicsImage, self.resource_path, ".png", self.itemsGeometry,  parent=self)
+            scene.setLogicModel(logicModel)
+            view = View(self.cfg["viewSize"])
+            view.setScene(scene)
+            print(name, type(name), '--------------------')
+            self.viewList.addScene(name, view, scene, logicModel)
+
+            self.viewsTubWidget.addTab(self.viewList.getView(name), str(name))
+            self.viewsTubWidget.setCurrentIndex(self.viewsTubWidget.count()-1)
 
 
 

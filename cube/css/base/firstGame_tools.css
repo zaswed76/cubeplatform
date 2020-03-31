@@ -59,26 +59,31 @@ ImageMapBtn:checked {
 }
 
 
+QTabBar::tab {
+    background: #989898;
+    border: 2px solid #C4C4C3;
+    border-bottom-color: #C2C7CB; /* same as the pane color */
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    min-width: 18ex;
+    padding: 2px;
+}
 
+QTabBar::tab:selected, QTabBar::tab:hover {
+    background: #d4d4d4;
+}
 
-/*ImageMapBtn {*/
-    /*border-top: none;*/
-    /*border-right: none;*/
-    /*border-bottom: 5px solid #757577;;*/
-    /*border-left: none;*/
-    /*!*background-color: #29ce26;*!*/
-    /*color: #858585;*/
-    /*!*color: #004B6B;*!*/
-    /*font-size: 12px;*/
-/*}*/
+QTabBar::tab:selected {
+    border-color: #9B9B9B;
+    border-bottom-color: #C2C7CB; /* same as pane color */
+}
 
-/*ImageMapBtn:checked {*/
+ QTabBar::close-button {
+     image: url("./plugins/firstGame/resources/icons/closetub.png");;
+     subcontrol-position: right;
+ }
 
-    /*background-color: #0d81bd;*/
-/*}*/
-
-/*ImageMapBtn:unchecked {*/
-
-    /*background-color: #2dbd23;*/
-/*}*/
-
+  QTabBar::close-button:hover {
+     image: url("./plugins/firstGame/resources/icons/closetubhover.png");;
+     subcontrol-position: right;
+ }

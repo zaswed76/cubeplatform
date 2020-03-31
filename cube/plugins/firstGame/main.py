@@ -59,7 +59,7 @@ class Main(AbcQFrame):
 
         # self.hbox_2 = QtWidgets.QHBoxLayout(self.midleFrame)
         self.hbox_2.setContentsMargins(0, 0, 0, 0,)
-        self.hbox_2.setSpacing(0)
+        self.hbox_2.setSpacing(30)
 
         self.leftFrame = leftFrame.LeftFrame()
 
@@ -74,9 +74,10 @@ class Main(AbcQFrame):
         self.rightFrame = tools.RightFrame()
 
         self.tools = tools.Tools(parent=self)
-        self.tools.initTubWidget()
-        self.toolImagesController = toolimagesController.ToolImagesController(self, self.tools.toolImagees)
+
+        self.toolImagesController = toolimagesController.ToolImagesController(self, self.tools)
         self.tools.setController(self.toolImagesController)
+        self.tools.initTubWidget()
         self.tools.initSaveReturnBtns()
         self.tools.initBottomPanel()
 
@@ -95,29 +96,7 @@ class Main(AbcQFrame):
         self.scene.setLogicModel(self.logicModel)
         self.tools.toolImagees.setLogicModel(self.logicModel)
 
-        #
-        # self.hbox = QtWidgets.QHBoxLayout(self)
-        # self.hbox.setContentsMargins(0, 0, 0, 0)
-        # self.hbox.setSpacing(1)
-        # sceneRect = self.cfg["sceneRect"]
-        # resource_path = paths.get_res_folder("cubeSerg", "images")
-        # self.scene = Scene(sceneRect, GraphicsImage, resource_path, ".png", self.itemsGeometry,  parent=self)
-        # self.view = View(self.cfg["viewSize"])
-        # self.view.setScene(self.scene)
-        # self.hbox.addStretch(35)
-        # self.hbox.addWidget(self.view, stretch=35)
-        #
-        # self.toolsController = tools.ToolsController(self)
-        # self.tools = tools.Tools(self.toolsController, parent=self)
-        # self.hbox.addWidget(self.tools, stretch=5)
-        #
-        #
-        # self.toolImagesController = toolimagesController.ToolImagesController(self, self.tools.toolImagees)
-        #
-        # self.logicModel = seqImage.Sequence()
-        # self.scene.setLogicModel(self.logicModel)
-        # self.tools.toolImagees.setLogicModel(self.logicModel)
-        # self.hbox.addStretch(35)
+
 
 
 

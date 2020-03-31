@@ -26,35 +26,34 @@ class ToolImagesController():
             self.main.tools.toolImagees.updateItems()
 
     def delBtns(self):
-        items = self.tool_widget.selectedNames()
+        items = self.tool_widget.toolImagees.selectedNames()
         self.main.logicModel.removeItems(items)
-        self.tool_widget.updateItems()
+        self.tool_widget.toolImagees.updateItems()
         self.main.scene.updateItems()
 
-    def downBtn(self):
-        sel_lst = self.tool_widget.selectedIndexes()
+    def downImageBtn(self):
+        sel_lst = self.tool_widget.toolImagees.selectedIndexes()
         if len(sel_lst) > 1 or not sel_lst:
             return
         index = sel_lst[0]
-        if index is not None and index > 0:
-            e = self.tool_widget.items.pop(index)
-            new_index = index-1
-            self.tool_widget.items.insert(new_index, e)
-            self.tool_widget.updateItems(self.tool_widget.items)
-            self.tool_widget.selectToIndex(new_index)
+        new_index = self.main.logicModel.down(index)
+        if new_index is not None:
+            self.tool_widget.toolImagees.updateItems()
+            self.tool_widget.toolImagees.selectToIndex(new_index)
+            self.main.scene.updateItems()
 
 
-    def upBtn(self):
-        sel_lst = self.tool_widget.selectedIndexes()
+    def upImageBtn(self):
+        sel_lst = self.tool_widget.toolImagees.selectedIndexes()
         if len(sel_lst) > 1 or not sel_lst:
             return
         index = sel_lst[0]
-        if index is not None and index < len(self.tool_widget.items) -1:
-            e = self.tool_widget.items.pop(index)
-            new_index = index+1
-            self.tool_widget.items.insert(new_index, e)
-            self.tool_widget.updateItems(self.view.items)
-            self.tool_widget.selectToIndex(new_index)
+        new_index = self.main.logicModel.up(index)
+        if new_index is not None:
+            self.tool_widget.toolImagees.updateItems()
+            self.tool_widget.toolImagees.selectToIndex(new_index)
+            self.main.scene.updateItems()
+
 
 
 

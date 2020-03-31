@@ -49,7 +49,23 @@ class Sequence(MutableSequence):
         for i in items:
             self.remove(i)
 
+    def up(self, index) -> int or None:
+        new_index = index + 1
+        if new_index < len(self._lst):
+            item = self._lst.pop(index)
+            self._lst.insert(new_index, item)
+            return new_index
+        else:
+            return None
 
+    def down(self, index) -> int or None:
+        new_index = index - 1
+        if new_index >= 0:
+            item = self._lst.pop(index)
+            self._lst.insert(new_index, item)
+            return new_index
+        else:
+            return None
 
     def __repr__(self):
         return "{self.start} - {self.end}; step - {self.step}"
@@ -57,8 +73,10 @@ class Sequence(MutableSequence):
 if __name__ == '__main__':
 
     imgseq = Sequence()
-    imgseq.setTen(90)
-    imgseq.setNames(0, 5, 45)
+    imgseq.setTen(0)
+    # imgseq.reverse()
+    imgseq.up(0)
+
     for i in imgseq:
         print(i)
 

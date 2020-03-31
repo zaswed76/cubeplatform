@@ -27,24 +27,58 @@ BtnImagePanel {
     border-bottom: none;
     border-left: 1px solid #757577;
 
-    background-color: #bdbdbd;
+    background-color: #f3f3f3;
 }
-
-
-
-
 
 ImageMapBtn {
     border-top: none;
     border-right: none;
-    border-bottom: 1px solid #757577;;
+    border-bottom: 1px solid #757577;
     border-left: none;
-    background-color: #29ce26;
+    padding: 0;
+    background-color: #d1d1d1;
+    font-family: Helvetica;
+    font-size: 10pt;
+    color: #505050;
+
+
 }
 
 ImageMapBtn:checked {
+    border-top: none;
+    border-right: none;
+    border-bottom: 1px solid #0563a6;
+    border-left: none;
+    background-color: #bababa;
+    padding: 0;
+    color: #00549a;
 
-    background-color: #0d81bd;
+
+
+
 }
 
+
+
+
+/*ImageMapBtn {*/
+    /*border-top: none;*/
+    /*border-right: none;*/
+    /*border-bottom: 5px solid #757577;;*/
+    /*border-left: none;*/
+    /*!*background-color: #29ce26;*!*/
+    /*color: #858585;*/
+    /*!*color: #004B6B;*!*/
+    /*font-size: 12px;*/
+/*}*/
+
+/*ImageMapBtn:checked {*/
+
+    /*background-color: #0d81bd;*/
+/*}*/
+
+/*ImageMapBtn:unchecked {*/
+
+    /*background-color: #2dbd23;*/
+/*}*/
 

@@ -43,9 +43,11 @@ class ImageMapBtn(QtWidgets.QPushButton):
         return self.userChecked
 
 class RightFrame(QtWidgets.QFrame):
-    def __init__(self):
+    def __init__(self, controller):
         super().__init__()
-        # self.setMinimumWidth(10)
+
+        self._controller = controller
+        print(self._controller)
         self.box = QtWidgets.QVBoxLayout(self)
         self.box.setContentsMargins(0, 0, 0, 0)
         self.up = BtnResize("up")
@@ -53,8 +55,8 @@ class RightFrame(QtWidgets.QFrame):
         self.down = BtnResize("down")
         self.down.setIcon(QtGui.QIcon(os.path.join(gamepaths.ICONS, "down.png")))
 
-        # self.up.clicked.connect(self._up)
-        # self.down.clicked.connect(self._down)
+        self.up.clicked.connect(self._controller.upImageBtn)
+        self.down.clicked.connect(self._controller.downImageBtn)
         self.addWidget(self.up)
         self.addWidget(self.down)
         self.addStretch(5)
@@ -86,10 +88,10 @@ class BtnResize(QtWidgets.QPushButton):
             self.setStyleSheet("Text-align:left")
 
 class ToolImagesTub(QtWidgets.QFrame):
-    def __init__(self, parent=None):
+    def __init__(self, controller):
         super().__init__()
 
-        self.main = parent
+        self._controller = controller
         self.basebox = QtWidgets.QVBoxLayout(self)
         self.splitter = QtWidgets.QSplitter()
 
@@ -97,8 +99,8 @@ class ToolImagesTub(QtWidgets.QFrame):
         self.splitter.setChildrenCollapsible(False)
 
         self.basebox.addWidget(self.splitter)
-        self.rightFrame = RightFrame()
-        self.leftFrame = BtnImagePanel(parent=self.main)
+        self.rightFrame = RightFrame(self._controller)
+        self.leftFrame = BtnImagePanel(self._controller)
         self.splitter.addWidget(self.leftFrame)
         self.splitter.addWidget(self.rightFrame)
 
@@ -128,23 +130,16 @@ class ToolImagesTub(QtWidgets.QFrame):
     def _delBtn(self):
         self.main.toolImagesController.delBtns()
 
-    def _down(self):
-        self.main.toolImagesController.downBtn()
 
-
-    def _up(self):
-        self.main.toolImagesController.upBtn()
 
 
 
 
 class BtnImagePanel(QtWidgets.QFrame):
-    def __init__(self, parent=None):
+    def __init__(self, controller):
         super().__init__()
-        self.main = parent
-        self.setStyleSheet("background-color: #C2C2C2")
+        self._controller = controller
         self.setMinimumWidth(70)
-        # self.setMaximumWidth(100)
         self.box = VBoxLayout(QtWidgets.QBoxLayout.BottomToTop, self)
         self.group = QtWidgets.QButtonGroup()
         self.items = []
@@ -165,7 +160,7 @@ class BtnImagePanel(QtWidgets.QFrame):
         self.box.addStretch(5)
         for index, name in enumerate(items):
             btn = ImageMapBtn(name, index)
-            btn.toggled.connect(self.imgBtnCheck)
+            # btn.toggled.connect(self.imgBtnCheck)
             self.box.addWidget(btn)
             self.group.addButton(btn)
 
@@ -202,17 +197,7 @@ class BtnImagePanel(QtWidgets.QFrame):
         for e in self.group.buttons():
             e.setChecked(False)
 
-class ToolAddImagesTub(QtWidgets.QFrame):
-    def __init__(self, parent=None, *args, **kwargs):
-        super().__init__(parent, *args, **kwargs)
-        self.main = parent
-        self.setStyleSheet("background-color: #616163")
-        self.box = QtWidgets.QVBoxLayout(self)
-        self.newTen = QtWidgets.QPushButton("new ten")
-        self.newTen.clicked.connect(self.showDialog)
-        self.newTen.setStyleSheet("background-color: #F2F2F4")
-        self.box.addWidget(self.newTen)
-        self.box.addStretch(1)
+
 
 
 
@@ -221,6 +206,6 @@ class ToolAddImagesTub(QtWidgets.QFrame):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     # app.setStyleSheet(open('./etc/{0}.qss'.format('style'), "r").read())
-    main = ToolAddImagesTub()
-    main.show()
-    sys.exit(app.exec_())
+    # main = ToolAddImagesTub()
+    # main.show()
+    # sys.exit(app.exec_())

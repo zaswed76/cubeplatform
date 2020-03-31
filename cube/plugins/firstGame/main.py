@@ -34,6 +34,23 @@ def qt_message_handler(mode, context, message):
 
 qInstallMessageHandler(qt_message_handler)
 
+
+class ViewList:
+    def __init__(self):
+        self._data = dict()
+
+    def addScene(self, name, view, scene, logicModel):
+        self._data[name] = dict(view=view, scene=scene, logicModel=logicModel)
+
+    def getView(self, name):
+        return self._data[name]["view"]
+
+    def getScene(self, name):
+        return self._data[name]["scene"]
+
+    def getLogicModel(self, name):
+        return self._data[name]["logicModel"]
+
 class Main(AbcQFrame):
     def __init__(self):
         super().__init__()
@@ -63,17 +80,12 @@ class Main(AbcQFrame):
 
         self.leftFrame = leftFrame.LeftFrame()
 
-        # scene
-
-        sceneRect = self.cfg["sceneRect"]
-        resource_path = paths.get_res_folder("cubeSerg", "images")
-        self.scene = Scene(sceneRect, GraphicsImage, resource_path, ".png", self.itemsGeometry,  parent=self)
-        self.view = View(self.cfg["viewSize"])
-        self.view.setScene(self.scene)
 
         self.rightFrame = tools.RightFrame()
 
         self.tools = tools.Tools(parent=self)
+
+
 
         self.toolImagesController = toolimagesController.ToolImagesController(self, self.tools)
         self.tools.setController(self.toolImagesController)
@@ -84,19 +96,43 @@ class Main(AbcQFrame):
         self.rightFrame.addWidget(self.tools)
         self.rightFrame.addStretch(100)
 
+        # scene -----------------------------------------------------------
+
+        self.viewList = ViewList()
+        self.currentSceneName = None
+
+        self.sceneRect = self.cfg["sceneRect"]
+        self.resource_path = paths.get_res_folder("cubeSerg", "images")
+
+        self.tub = QtWidgets.QTabWidget()
+        self.tub.setMovable(True)
+
+
+        self.initScene(self.currentSceneName)
+        # scene -----------------------------------------------------------
+
 
 
         self.hbox_2.addWidget(self.leftFrame)
-        self.hbox_2.addWidget(self.view)
+        # self.hbox_2.addWidget(self.view)
+        self.hbox_2.addWidget(self.tub)
+
         self.hbox_2.addWidget(self.rightFrame)
 
 
 
-        self.logicModel = seqImage.Sequence()
-        self.scene.setLogicModel(self.logicModel)
-        self.tools.toolImagees.setLogicModel(self.logicModel)
 
 
+
+    def initScene(self, name):
+        logicModel = seqImage.Sequence()
+        self.tools.toolImagees.setLogicModel(logicModel)
+        scene = Scene(self.sceneRect, GraphicsImage, self.resource_path, ".png", self.itemsGeometry,  parent=self)
+        scene.setLogicModel(logicModel)
+        view = View(self.cfg["viewSize"])
+        view.setScene(scene)
+        self.viewList.addScene(name, view, scene, logicModel)
+        self.tub.addTab(self.viewList.getView(name), str(name))
 
 
 

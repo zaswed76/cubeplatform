@@ -20,9 +20,10 @@ class ToolImagesController():
     def addTen(self, ten):
         ten = self.main.tools.bottomAddPanel.showDialog()
         if ten is not None:
-            self.main.scene.clear()
-            self.main.logicModel.setTen(ten)
-            self.main.scene.updateItems()
+            self.main.initScene(ten)
+            self.main.viewList.getScene(ten).clear()
+            self.main.viewList.getLogicModel(ten).setTen(ten)
+            self.main.viewList.getScene(ten).updateItems()
             self.main.tools.toolImagees.updateItems()
 
     def delBtns(self):

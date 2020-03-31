@@ -51,7 +51,8 @@ class ViewList:
     def getLogicModel(self, name):
         return self._data[name]["logicModel"]
 
-
+    def isName(self, name):
+        return self._data.get(name, None)
 
 class TabWidgetScenes(QtWidgets.QTabWidget):
     def __init__(self):
@@ -105,7 +106,7 @@ class Main(AbcQFrame):
         # scene -----------------------------------------------------------
 
         self.viewList = ViewList()
-        self.currentSceneName = None
+        self._currentSceneName = None
 
         self.sceneRect = self.cfg["sceneRect"]
         self.resource_path = paths.get_res_folder("cubeSerg", "images")
@@ -121,20 +122,35 @@ class Main(AbcQFrame):
 
 
         self.hbox_2.addWidget(self.leftFrame)
-        # self.hbox_2.addWidget(self.view)
         self.hbox_2.addWidget(self.viewsTubWidget)
-
         self.hbox_2.addWidget(self.rightFrame)
 
+    @property
+    def currentSceneName(self):
+        if self._currentSceneName is None: return None
+        else:
+            return int(self._currentSceneName)
 
+    @currentSceneName.setter
+    def currentSceneName(self, name):
+        self._currentSceneName = name
 
+    @property
+    def currentScene(self):
+        return self.viewList.getScene(self.currentSceneName)
 
+    @property
+    def currentView(self):
+        return self.viewList.getView(self.currentSceneName)
 
+    @property
+    def currentLogicModel(self):
+        return self.viewList.getLogicModel(self.currentSceneName)
 
     def initScene(self, name):
-        # name = str(name)
         counttubs = self.viewsTubWidget.count()
         if counttubs == 1 and self.viewsTubWidget.tabText(0) == "None":
+            print("bbbbbbbbbbbbbbbbbbb")
             logicModel = seqImage.Sequence()
             self.tools.toolImagees.setLogicModel(logicModel)
             scene = Scene(self.sceneRect, GraphicsImage, self.resource_path, ".png", self.itemsGeometry,  parent=self)
@@ -151,7 +167,6 @@ class Main(AbcQFrame):
             scene.setLogicModel(logicModel)
             view = View(self.cfg["viewSize"])
             view.setScene(scene)
-            print(name, type(name), '--------------------')
             self.viewList.addScene(name, view, scene, logicModel)
 
             self.viewsTubWidget.addTab(self.viewList.getView(name), str(name))
@@ -161,8 +176,12 @@ class Main(AbcQFrame):
 
 
     def saveGeometry(self):
-        for i in self.scene.getItemsGeometry():
+        for i in self.currentScene.getItemsGeometry():
             self.itemsGeometry[i.name] = i.itemsGeometry
+            self.itemsGeometry[i.name]["pos"] = [i.pos().x(), i.pos().y()]
+        if not self.itemsGeometry.get("tens", False):
+            self.itemsGeometry["tens"] = {}
+        self.itemsGeometry["tens"][self.currentSceneName] = self.currentLogicModel.data
         self.itemsGeometry.save()
 
     def returnGeometry(self):

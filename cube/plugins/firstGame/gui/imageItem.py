@@ -101,9 +101,6 @@ class GraphicsImage(QtWidgets.QGraphicsPixmapItem):
         y = 0
         self.setPos(x, y)
 
-    def mouseMoveEvent(self, *args, **kwargs):
-        super().mouseMoveEvent(*args, **kwargs)
-        self.itemsGeometry["pos"] = [self.pos().x(), self.pos().y()]
 
     def mouseReleaseEvent(self, *args, **kwargs):
         super().mouseReleaseEvent(*args, **kwargs)

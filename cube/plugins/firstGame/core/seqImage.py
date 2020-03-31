@@ -8,7 +8,10 @@ class Sequence(MutableSequence):
 
     def setTen(self, ten, step=1):
         self._lst.clear()
-        self._lst.extend([str(x)for x in range(ten, ten+10, step)])
+        if isinstance(ten, int):
+            self._lst.extend([str(x)for x in range(ten, ten+10, step)])
+        elif isinstance(ten, list):
+            self._lst.extend(ten)
 
     def setNames(self, *names):
         self._lst.clear()

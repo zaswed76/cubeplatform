@@ -1,0 +1,50 @@
+
+QFrame#firstGame_tools{
+    background-color: #989898;
+}
+
+BottomBtn#firstGame_delBtn {
+        border-image: url("./plugins/firstGame/resources/icons/del.png");
+
+}
+
+BottomBtn#firstGame_addFilesBtn {
+    border-image: url("./plugins/firstGame/resources/icons/openfieles.png");
+
+}
+
+BottomBtn#firstGame_addTenBtn {
+    border-image: url("./plugins/firstGame/resources/icons/openten.png");
+
+}
+
+
+
+
+BtnImagePanel {
+    border-top: 1px solid #757577;
+    border-right: 1px solid #757577;
+    border-bottom: none;
+    border-left: 1px solid #757577;
+
+    background-color: #bdbdbd;
+}
+
+
+
+
+
+ImageMapBtn {
+    border-top: none;
+    border-right: none;
+    border-bottom: 1px solid #757577;;
+    border-left: none;
+    background-color: #29ce26;
+}
+
+ImageMapBtn:checked {
+
+    background-color: #0d81bd;
+}
+
+

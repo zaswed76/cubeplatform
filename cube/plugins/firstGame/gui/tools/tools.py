@@ -64,6 +64,12 @@ class RightFrame(QtWidgets.QFrame):
 class Tools(QtWidgets.QFrame):
     def __init__(self, parent,  *args, **kwargs):
 
+        """
+
+        :param parent:
+        :param args:
+        :param kwargs:
+        """
         super().__init__(parent, *args, **kwargs)
         self.main = parent
         self.setObjectName("firstGame_tools")
@@ -71,9 +77,6 @@ class Tools(QtWidgets.QFrame):
         self.box = QtWidgets.QVBoxLayout(self)
         self.box.setContentsMargins(0, 0, 0, 0)
         self.box.setSpacing(1)
-
-
-
 
 
     def initTubWidget(self):

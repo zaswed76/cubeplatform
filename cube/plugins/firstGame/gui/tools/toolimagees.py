@@ -28,7 +28,7 @@ class Dialog(QtWidgets.QInputDialog):
         self.setIntMinimum(0)
         self.setIntStep(10)
 
-class Btn(QtWidgets.QPushButton):
+class ImageMapBtn(QtWidgets.QPushButton):
     def __init__(self, name, index, *__args):
         super().__init__(*__args)
         self.name = name
@@ -36,8 +36,9 @@ class Btn(QtWidgets.QPushButton):
         self.setText(name)
         self.setCheckable(True)
         self.setAutoExclusive(False)
-        self.setStyleSheet('background: white;')
         self.userChecked = False
+        self.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.setMinimumHeight(28)
     def isUserChecked(self):
         return self.userChecked
 
@@ -47,7 +48,6 @@ class RightFrame(QtWidgets.QFrame):
         # self.setMinimumWidth(10)
         self.box = QtWidgets.QVBoxLayout(self)
         self.box.setContentsMargins(0, 0, 0, 0)
-
         self.up = BtnResize("up")
         self.up.setIcon(QtGui.QIcon(os.path.join(gamepaths.ICONS, "up.png")))
         self.down = BtnResize("down")
@@ -164,7 +164,7 @@ class BtnImagePanel(QtWidgets.QFrame):
         self.group.setExclusive(False)
         self.box.addStretch(5)
         for index, name in enumerate(items):
-            btn = Btn(name, index)
+            btn = ImageMapBtn(name, index)
             btn.toggled.connect(self.imgBtnCheck)
             self.box.addWidget(btn)
             self.group.addButton(btn)

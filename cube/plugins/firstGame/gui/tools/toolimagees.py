@@ -125,6 +125,7 @@ class ToolImagesTub(QtWidgets.QFrame):
         self.leftFrame.selectToNames(*names)
 
     def selectToIndexs(self, *indexs):
+
         self.leftFrame.selectToIndexs(*indexs)
 
     def updateItems(self):
@@ -181,7 +182,9 @@ class BtnImagePanel(QtWidgets.QFrame):
 
     def selectToIndexs(self, *indexs):
         self.clearSelecteted()
+
         for i, e in enumerate(self.group.buttons()):
+            print(type(i), [type(x) for x in indexs], "!!!!!!!")
             if i in indexs:
                 e.setChecked(True)
 

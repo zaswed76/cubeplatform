@@ -56,6 +56,7 @@ class ToolImagesController():
         new_index = logic_model.up(index)
         if new_index is not None:
             self.tool_widget.toolImagees.updateItems()
+            print(index, new_index, sep="--------")
             self.tool_widget.toolImagees.selectToIndexs(new_index)
             self.main.currentScene.updateItems()
 

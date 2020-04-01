@@ -20,7 +20,7 @@ class MainWindow(QtWidgets.QFrame):
         super().__init__(*args, **kwargs)
         self.setObjectName("main")
         self.cfg = Config(config_pth)
-        self.showFullScreen()
+        # self.showFullScreen()
         self._set_style_sheet(self.cfg["style_name"])
 
         self.plugins = pluginLoader.PluginLoader(paths.PLUGINS_FOLDER)

@@ -150,7 +150,7 @@ class Main(AbcQFrame):
         self.resource_path = paths.get_res_folder("cubeSerg", "images")
 
         self.viewsTubWidget = TabWidgetScenes()
-        self.viewsTubWidget.tabCloseRequested.connect(self.closeTabView)
+        self.viewsTubWidget.tabCloseRequested.connect(self.toolImagesController.closeTabView)
 
         self.viewsTubWidget.currentChanged.connect(self.toolImagesController.changedViewTub)
         self.viewsTubWidget.setMovable(True)
@@ -160,16 +160,9 @@ class Main(AbcQFrame):
         # scene -----------------------------------------------------------
 
 
-
         self.hbox_2.addWidget(self.leftFrame)
         self.hbox_2.addWidget(self.viewsTubWidget)
         self.hbox_2.addWidget(self.rightFrame)
-
-    def closeTabView(self, i):
-        widget = self.viewsTubWidget.widget(i)
-        self.viewMap.remove(widget.name)
-        self.viewsTubWidget.removeTab(i)
-
 
     @property
     def currentSceneName(self):
@@ -194,26 +187,29 @@ class Main(AbcQFrame):
     def currentLogicModel(self):
         return self.viewMap.getLogicModel(self.currentSceneName)
 
-    def initScene(self, name):
-        counttubs = self.viewsTubWidget.count()
-        if counttubs == 1 and self.viewsTubWidget.tabText(0) == "None":
+    def _init_scene(self, name):
             logicModel = seqImage.Sequence()
             self.tools.toolImagees.setLogicModel(logicModel)
             scene = Scene(self.sceneRect, GraphicsImage, self.resource_path, ".png", self.itemsGeometry,  parent=self)
-            scene.selectionChanged.connect(self.selection_changed)
+            scene.selectionChanged.connect(self.selectionSceneChange)
             scene.setLogicModel(logicModel)
             view = View(self.cfg["viewSize"], name)
-
             view.setScene(scene)
-            self.viewMap.clear()
             self.viewMap.addScene(name, view, scene, logicModel)
+
+
+    def initScene(self, name):
+        counttubs = self.viewsTubWidget.count()
+        if counttubs == 1 and self.viewsTubWidget.tabText(0) == "None":
+            self._init_scene(name)
+            self.viewMap.clear()
             self.viewsTubWidget.clear()
             self.viewsTubWidget.addTab(self.viewMap.view(name), str(name))
         else:
             logicModel = seqImage.Sequence()
             self.tools.toolImagees.setLogicModel(logicModel)
             scene = Scene(self.sceneRect, GraphicsImage, self.resource_path, ".png", self.itemsGeometry,  parent=self)
-            scene.selectionChanged.connect(self.selection_changed)
+            scene.selectionChanged.connect(self.selectionSceneChange)
             scene.setLogicModel(logicModel)
             view = View(self.cfg["viewSize"], name)
             view.setScene(scene)
@@ -222,45 +218,13 @@ class Main(AbcQFrame):
             self.viewsTubWidget.setCurrentIndex(self.viewsTubWidget.count()-1)
 
 
-    def selection_changed(self):
+    def selectionSceneChange(self):
         scene = self.currentScene
         if scene is not None:
             names = [x.name for x in self.currentScene.selectedItems()]
             self.tools.toolImagees.selectToNames(*names)
 
-    def saveGeometry(self):
-        for i in self.currentScene.getItemsGeometry():
-            self.itemsGeometry[i.name] = i.itemsGeometry
-            self.itemsGeometry[i.name]["pos"] = [i.pos().x(), i.pos().y()]
-        if not self.itemsGeometry.get("tens", False):
-            self.itemsGeometry["tens"] = {}
-        self.itemsGeometry["tens"][self.currentSceneName] = self.currentLogicModel.data
-        self.itemsGeometry.save()
 
-    def returnGeometry(self):
-        print("returnGeometry")
-
-
-
-    def imgBtnCheck(self):
-        pass
-        # selected = self.tools.toolImagees.userSelectedItems()
-        # self.scene.selectedfromName(selected)
-
-
-    def imagePixmapCheck(self):
-        selected = [x.name for x in self.currentScene.selectedItems()]
-        self.tools.toolImagees.selectToNames(*selected)
-
-    # def closeEvent(self, event):
-    #         close = QtWidgets.QMessageBox.question(self,
-    #                                      "QUIT",
-    #                                      "Are you sure want to stop process?",
-    #                                      QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-    #         if close == QtWidgets.QMessageBox.Yes:
-    #             event.accept()
-    #         else:
-    #             event.ignore()
 
 if __name__ == '__main__':
 

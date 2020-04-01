@@ -11,8 +11,21 @@ class ToolImagesController():
         self.tool_widget = tool_widget
         self.main = main
 
-    def saveBtn(self):
-        self.main.saveGeometry()
+
+    def saveGeometry(self):
+        for i in self.main.currentScene.getItemsGeometry():
+            self.main.itemsGeometry[i.name] = i.itemsGeometry
+            self.main.itemsGeometry[i.name]["pos"] = [i.pos().x(), i.pos().y()]
+        if not self.main.itemsGeometry.get("tens", False):
+            self.main.itemsGeometry["tens"] = {}
+        self.main.itemsGeometry["tens"][self.main.currentSceneName] = self.main.currentLogicModel.data
+        self.main.itemsGeometry.save()
+
+    def returnGeometry(self):
+        print("returnGeometry")
+
+    # def saveBtn(self):
+    #     self.main.saveGeometry()
 
     def returnBtn(self):
         self.main.returnGeometry()
@@ -56,13 +69,16 @@ class ToolImagesController():
         logic_model = self.main.currentLogicModel
         new_index = logic_model.up(index)
         if new_index is not None:
-
             self.tool_widget.toolImagees.updateItems()
-            # print(index, new_index, sep="--------")
-
-
             self.main.currentScene.updateItems()
             self.tool_widget.toolImagees.selectToIndexs(new_index)
+
+    def closeTabView(self, i):
+        # todo надо доделать
+        widget = self.main.viewsTubWidget.widget(i)
+        self.main.viewMap.remove(widget.name)
+        self.main.viewsTubWidget.removeTab(i)
+
 
     def changedViewTub(self, i):
         name = self.main.viewsTubWidget.tabText(i)

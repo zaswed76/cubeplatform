@@ -74,7 +74,6 @@ class Scene(QtWidgets.QGraphicsScene):
     def setAllSelected(self, select):
         for i in self.items():
             i.setSelected(select)
-        self.main.imagePixmapCheck()
 
 
     def getItemsGeometry(self):

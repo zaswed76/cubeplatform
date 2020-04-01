@@ -93,7 +93,7 @@ class Tools(QtWidgets.QFrame):
     def initSaveReturnBtns(self):
         self.saveBtn = QtWidgets.QPushButton("save")
         self.saveBtn.setFixedWidth(200)
-        self.saveBtn.clicked.connect(self._controller.saveBtn)
+        self.saveBtn.clicked.connect(self._controller.saveGeometry)
         self.returnBtn = QtWidgets.QPushButton("return")
         self.returnBtn.clicked.connect(self._controller.returnBtn)
         self.box.insertWidget(0, self.saveBtn)

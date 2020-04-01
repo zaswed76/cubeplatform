@@ -35,15 +35,47 @@ def qt_message_handler(mode, context, message):
 qInstallMessageHandler(qt_message_handler)
 
 
-class ViewList:
-    def __init__(self):
+class ViewMap:
+    def __init__(self, *args, **kwargs):
         self._data = dict()
+        self.__dict__.update(*args, **kwargs)
+
+    def __setitem__(self, key, value):
+        self.__dict__[key] = value
+
+    def __getitem__(self, key):
+        return self.__dict__[key]
+
+    def __delitem__(self, key):
+        del self.__dict__[key]
+
+    def __iter__(self):
+        return iter(self.__dict__)
+
+    def __len__(self):
+        return len(self.__dict__)
+
+
+    def __str__(self):
+        return str(self.__dict__)
+
+    def __repr__(self):
+        return '{}, D({})'.format(super(ViewMap, self).__repr__(),
+                                  self.__dict__)
+
+
+    def view(self, key):
+        return self.__dict__[key]["view"]
+
+    def clear(self):
+        self._data.clear()
 
     def addScene(self, name, view, scene, logicModel):
         self._data[name] = dict(view=view, scene=scene, logicModel=logicModel)
+        self.__dict__[name] = dict(view=view, scene=scene, logicModel=logicModel)
 
     def getView(self, name):
-        return self._data[name]["view"]
+        return self.__dict__[name]["view"]
 
     def getScene(self, name):
         return self._data[name]["scene"]
@@ -53,6 +85,12 @@ class ViewList:
 
     def isName(self, name):
         return self._data.get(name, None)
+
+    def remove(self, name):
+        del(self._data[name])
+
+    def __repr__(self):
+        return str(self._data.items())
 
 class TabWidgetScenes(QtWidgets.QTabWidget):
     def __init__(self):
@@ -105,13 +143,15 @@ class Main(AbcQFrame):
 
         # scene -----------------------------------------------------------
 
-        self.viewList = ViewList()
+        self.viewMap = ViewMap()
         self._currentSceneName = None
 
         self.sceneRect = self.cfg["sceneRect"]
         self.resource_path = paths.get_res_folder("cubeSerg", "images")
 
         self.viewsTubWidget = TabWidgetScenes()
+        self.viewsTubWidget.tabCloseRequested.connect(self.closeTabView)
+
         self.viewsTubWidget.currentChanged.connect(self.toolImagesController.changedViewTub)
         self.viewsTubWidget.setMovable(True)
 
@@ -125,6 +165,12 @@ class Main(AbcQFrame):
         self.hbox_2.addWidget(self.viewsTubWidget)
         self.hbox_2.addWidget(self.rightFrame)
 
+    def closeTabView(self, i):
+        widget = self.viewsTubWidget.widget(i)
+        self.viewMap.remove(widget.name)
+        self.viewsTubWidget.removeTab(i)
+
+
     @property
     def currentSceneName(self):
         if self._currentSceneName is None: return None
@@ -137,15 +183,16 @@ class Main(AbcQFrame):
 
     @property
     def currentScene(self):
-        return self.viewList.getScene(self.currentSceneName)
+        scene = self.viewMap.getScene(self.currentSceneName)
+        return scene
 
     @property
     def currentView(self):
-        return self.viewList.getView(self.currentSceneName)
+        return self.viewMap.getView(self.currentSceneName)
 
     @property
     def currentLogicModel(self):
-        return self.viewList.getLogicModel(self.currentSceneName)
+        return self.viewMap.getLogicModel(self.currentSceneName)
 
     def initScene(self, name):
         counttubs = self.viewsTubWidget.count()
@@ -155,28 +202,31 @@ class Main(AbcQFrame):
             scene = Scene(self.sceneRect, GraphicsImage, self.resource_path, ".png", self.itemsGeometry,  parent=self)
             scene.selectionChanged.connect(self.selection_changed)
             scene.setLogicModel(logicModel)
-            view = View(self.cfg["viewSize"])
+            view = View(self.cfg["viewSize"], name)
+
             view.setScene(scene)
-            self.viewList.addScene(name, view, scene, logicModel)
+            self.viewMap.clear()
+            self.viewMap.addScene(name, view, scene, logicModel)
             self.viewsTubWidget.clear()
-            self.viewsTubWidget.addTab(self.viewList.getView(name), str(name))
+            self.viewsTubWidget.addTab(self.viewMap.view(name), str(name))
         else:
             logicModel = seqImage.Sequence()
             self.tools.toolImagees.setLogicModel(logicModel)
             scene = Scene(self.sceneRect, GraphicsImage, self.resource_path, ".png", self.itemsGeometry,  parent=self)
             scene.selectionChanged.connect(self.selection_changed)
             scene.setLogicModel(logicModel)
-            view = View(self.cfg["viewSize"])
+            view = View(self.cfg["viewSize"], name)
             view.setScene(scene)
-            self.viewList.addScene(name, view, scene, logicModel)
-
-            self.viewsTubWidget.addTab(self.viewList.getView(name), str(name))
+            self.viewMap.addScene(name, view, scene, logicModel)
+            self.viewsTubWidget.addTab(self.viewMap.getView(name), str(name))
             self.viewsTubWidget.setCurrentIndex(self.viewsTubWidget.count()-1)
 
 
     def selection_changed(self):
-        names = [x.name for x in self.currentScene.selectedItems()]
-        self.tools.toolImagees.selectToNames(*names)
+        scene = self.currentScene
+        if scene is not None:
+            names = [x.name for x in self.currentScene.selectedItems()]
+            self.tools.toolImagees.selectToNames(*names)
 
     def saveGeometry(self):
         for i in self.currentScene.getItemsGeometry():
@@ -201,6 +251,16 @@ class Main(AbcQFrame):
     def imagePixmapCheck(self):
         selected = [x.name for x in self.currentScene.selectedItems()]
         self.tools.toolImagees.selectToNames(*selected)
+
+    # def closeEvent(self, event):
+    #         close = QtWidgets.QMessageBox.question(self,
+    #                                      "QUIT",
+    #                                      "Are you sure want to stop process?",
+    #                                      QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+    #         if close == QtWidgets.QMessageBox.Yes:
+    #             event.accept()
+    #         else:
+    #             event.ignore()
 
 if __name__ == '__main__':
 

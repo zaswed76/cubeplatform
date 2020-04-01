@@ -20,6 +20,7 @@ class Scene(QtWidgets.QGraphicsScene):
         """
         super().__init__(*__args)
         self.main = parent
+        self.name = None
         self.itemsGeometry = itemsGeometry
         x, y, width, height = rect
         self.ext = ext
@@ -30,9 +31,11 @@ class Scene(QtWidgets.QGraphicsScene):
         control = {
             QtCore.Qt.Key_A: ("setAllSelected", True),
             QtCore.Qt.Key_D: ("setAllSelected", False),
-            QtCore.Qt.Key_M: ("mirrorsItem", None)
+            QtCore.Qt.Key_M: ("mirrorsItem", None),
+            QtCore.Qt.Key_R: ("resetItems", None),
         }
         self.keyMap["ctrl"] = control
+
 
     def setLogicModel(self, logic_model):
         self.logicModel = logic_model
@@ -94,15 +97,24 @@ class Scene(QtWidgets.QGraphicsScene):
     #     print('selectionChanged')
     #     super().selectionChanged()
 
+    def resetItems(self, *args):
+        print("resetItems")
+
+    def __repr__(self):
+        return "Scene-{}".format(self.name)
 
 class View(QtWidgets.QGraphicsView):
-    def __init__(self, size):
+    def __init__(self, size, name=None):
         super().__init__()
+        self.name = name
         self.setObjectName("firstGame_View")
         width, height = size
         self.setFixedSize(width+4, height+4)
         self.setDragMode(QtWidgets.QGraphicsView.RubberBandDrag)
-        # self.setRenderHint(QtGui.QPainter.Antialiasing, True)
+
+
+    def __repr__(self):
+        return "View - {}".format(self.scene())
 
 
 if __name__ == '__main__':

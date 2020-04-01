@@ -39,8 +39,17 @@ class ImageMapBtn(QtWidgets.QPushButton):
         self.userChecked = False
         self.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.setMinimumHeight(28)
+
     def isUserChecked(self):
         return self.userChecked
+
+    # def setChecked(self, bool):
+    #     if bool:
+    #         print("setChecked {}".format(self.name))
+    #     super().setChecked(bool)
+
+    def __repr__(self):
+        return "ImageMapBtn-{}".format(self.name)
 
 class RightFrame(QtWidgets.QFrame):
     def __init__(self, controller):
@@ -125,7 +134,6 @@ class ToolImagesTub(QtWidgets.QFrame):
         self.leftFrame.selectToNames(*names)
 
     def selectToIndexs(self, *indexs):
-
         self.leftFrame.selectToIndexs(*indexs)
 
     def updateItems(self):
@@ -182,9 +190,7 @@ class BtnImagePanel(QtWidgets.QFrame):
 
     def selectToIndexs(self, *indexs):
         self.clearSelecteted()
-
         for i, e in enumerate(self.group.buttons()):
-            print(type(i), [type(x) for x in indexs], "!!!!!!!")
             if i in indexs:
                 e.setChecked(True)
 

@@ -19,13 +19,14 @@ class ToolImagesController():
 
     def addTen(self, ten):
         ten = self.main.tools.bottomAddPanel.showDialog()
-        if ten is not None and not self.main.viewList.isName(ten):
+        if ten is not None and not self.main.viewMap.isName(ten):
             self.main.initScene(ten)
-            self.main.viewList.getScene(ten).clear()
-
+            self.main.viewMap.getScene(ten).clear()
             tenlst = self.main.itemsGeometry.get("tens", {}).get(ten, ten)
-            self.main.viewList.getLogicModel(ten).setTen(tenlst)
-            self.main.viewList.getScene(ten).updateItems()
+            self.main.viewMap.getLogicModel(ten).setTen(tenlst)
+
+            self.main.viewMap.getScene(ten).updateItems()
+            self.main.viewMap.getScene(ten).name = ten
             self.main.tools.toolImagees.updateItems()
 
     def delBtns(self):
@@ -43,8 +44,8 @@ class ToolImagesController():
         new_index = logic_model.down(index)
         if new_index is not None:
             self.tool_widget.toolImagees.updateItems()
-            self.tool_widget.toolImagees.selectToIndexs(new_index)
             self.main.currentScene.updateItems()
+            self.tool_widget.toolImagees.selectToIndexs(new_index)
 
 
     def upImageBtn(self):
@@ -55,16 +56,19 @@ class ToolImagesController():
         logic_model = self.main.currentLogicModel
         new_index = logic_model.up(index)
         if new_index is not None:
+
             self.tool_widget.toolImagees.updateItems()
-            print(index, new_index, sep="--------")
-            self.tool_widget.toolImagees.selectToIndexs(new_index)
+            # print(index, new_index, sep="--------")
+
+
             self.main.currentScene.updateItems()
+            self.tool_widget.toolImagees.selectToIndexs(new_index)
 
     def changedViewTub(self, i):
         name = self.main.viewsTubWidget.tabText(i)
         if name != "None":
             if name:
-                logic_model = self.main.viewList.getLogicModel(int(name))
+                logic_model = self.main.viewMap.getLogicModel(int(name))
                 self.tool_widget.toolImagees.setLogicModel(logic_model)
                 self.tool_widget.toolImagees.updateItems()
                 self.main.currentSceneName = name

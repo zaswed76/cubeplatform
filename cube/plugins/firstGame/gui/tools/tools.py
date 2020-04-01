@@ -82,7 +82,7 @@ class Tools(QtWidgets.QFrame):
     def initTubWidget(self):
         self.tub = QtWidgets.QTabWidget()
         self.tub.setMovable(True)
-        self.toolImagees = toolimagees.ToolImagesTub(self._controller)
+        self.toolImagees = toolimagees.ControlPanelScene(self._controller)
         self.tub.addTab(self.toolImagees, "Images")
         self.box.insertWidget(2, self.tub)
 

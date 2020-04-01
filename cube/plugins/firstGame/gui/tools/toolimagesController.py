@@ -33,7 +33,7 @@ class ToolImagesController():
     def addTen(self, ten):
         ten = self.main.tools.bottomAddPanel.showDialog()
         if ten is not None and not self.main.viewMap.isName(ten):
-            self.main.initScene(ten)
+            self.main.initView(ten)
             self.main.viewMap.getScene(ten).clear()
             tenlst = self.main.itemsGeometry.get("tens", {}).get(ten, ten)
             self.main.viewMap.getLogicModel(ten).setTen(tenlst)
@@ -83,6 +83,7 @@ class ToolImagesController():
     def changedViewTub(self, i):
         name = self.main.viewsTubWidget.tabText(i)
         if name != "None":
+            print(name, type(name), "Name")
             if name:
                 logic_model = self.main.viewMap.getLogicModel(int(name))
                 self.tool_widget.toolImagees.setLogicModel(logic_model)

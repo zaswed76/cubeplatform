@@ -89,9 +89,6 @@ class ViewMap:
     def remove(self, name):
         del(self._data[name])
 
-    def __repr__(self):
-        return str(self._data.items())
-
 class TabWidgetScenes(QtWidgets.QTabWidget):
     def __init__(self):
         super().__init__()
@@ -102,67 +99,52 @@ class Main(AbcQFrame):
     def __init__(self):
         super().__init__()
         self.plugin_name = None
-
+        self._currentSceneName = None
         self.cfg = config.Config(str(Path(paths.PLUGINS_FOLDER) / "firstGame" / "config.yaml"))
-
         self.itemsGeometry = config.Config(str(Path(paths.PLUGINS_FOLDER) / "firstGame" / "itemGeometry.yaml"))
+        self.sceneRect = self.cfg["sceneRect"]
+        self.resource_path = paths.get_res_folder("cubeSerg", "images")
 
+        self.viewMap = ViewMap()
+        self.initTools()
+        self.initViewsTubWidget()
+        self.initView(self.currentSceneName)
+
+        #
         self.vbox_1 = QtWidgets.QVBoxLayout(self)
         self.vbox_1.setContentsMargins(0, 0, 0, 0)
         self.vbox_1.setSpacing(0)
         self.topFrame = topFrame.TopFrame()
         self.midleFrame = QtWidgets.QFrame()
         self.bottomFrame = bottomFrame.BottomFrame()
-
         self.vbox_1.addWidget(self.topFrame)
         self.vbox_1.addWidget(self.midleFrame)
         self.vbox_1.addWidget(self.bottomFrame)
 
         self.hbox_2 = QtWidgets.QHBoxLayout(self.midleFrame)
-
         self.hbox_2.setContentsMargins(0, 0, 0, 0,)
         self.hbox_2.setSpacing(30)
-
         self.leftFrame = leftFrame.LeftFrame()
-
-
         self.rightFrame = tools.RightFrame()
+        self.rightFrame.addWidget(self.tools)
+        self.rightFrame.addStretch(100)
+        self.hbox_2.addWidget(self.leftFrame)
+        self.hbox_2.addWidget(self.viewsTubWidget)
+        self.hbox_2.addWidget(self.rightFrame)
 
+    def initTools(self):
         self.tools = tools.Tools(parent=self)
-
-
-
         self.toolImagesController = toolimagesController.ToolImagesController(self, self.tools)
         self.tools.setController(self.toolImagesController)
         self.tools.initTubWidget()
         self.tools.initSaveReturnBtns()
         self.tools.initBottomPanel()
 
-        self.rightFrame.addWidget(self.tools)
-        self.rightFrame.addStretch(100)
-
-        # scene -----------------------------------------------------------
-
-        self.viewMap = ViewMap()
-        self._currentSceneName = None
-
-        self.sceneRect = self.cfg["sceneRect"]
-        self.resource_path = paths.get_res_folder("cubeSerg", "images")
-
+    def initViewsTubWidget(self):
         self.viewsTubWidget = TabWidgetScenes()
         self.viewsTubWidget.tabCloseRequested.connect(self.toolImagesController.closeTabView)
-
         self.viewsTubWidget.currentChanged.connect(self.toolImagesController.changedViewTub)
         self.viewsTubWidget.setMovable(True)
-
-
-        self.initScene(self.currentSceneName)
-        # scene -----------------------------------------------------------
-
-
-        self.hbox_2.addWidget(self.leftFrame)
-        self.hbox_2.addWidget(self.viewsTubWidget)
-        self.hbox_2.addWidget(self.rightFrame)
 
     @property
     def currentSceneName(self):
@@ -187,7 +169,7 @@ class Main(AbcQFrame):
     def currentLogicModel(self):
         return self.viewMap.getLogicModel(self.currentSceneName)
 
-    def _init_scene(self, name):
+    def _setViewToViewMap(self, name):
             logicModel = seqImage.Sequence()
             self.tools.toolImagees.setLogicModel(logicModel)
             scene = Scene(self.sceneRect, GraphicsImage, self.resource_path, ".png", self.itemsGeometry,  parent=self)
@@ -198,22 +180,15 @@ class Main(AbcQFrame):
             self.viewMap.addScene(name, view, scene, logicModel)
 
 
-    def initScene(self, name):
+    def initView(self, name):
         counttubs = self.viewsTubWidget.count()
         if counttubs == 1 and self.viewsTubWidget.tabText(0) == "None":
-            self._init_scene(name)
             self.viewMap.clear()
+            self._setViewToViewMap(name)
             self.viewsTubWidget.clear()
             self.viewsTubWidget.addTab(self.viewMap.view(name), str(name))
         else:
-            logicModel = seqImage.Sequence()
-            self.tools.toolImagees.setLogicModel(logicModel)
-            scene = Scene(self.sceneRect, GraphicsImage, self.resource_path, ".png", self.itemsGeometry,  parent=self)
-            scene.selectionChanged.connect(self.selectionSceneChange)
-            scene.setLogicModel(logicModel)
-            view = View(self.cfg["viewSize"], name)
-            view.setScene(scene)
-            self.viewMap.addScene(name, view, scene, logicModel)
+            self._setViewToViewMap(name)
             self.viewsTubWidget.addTab(self.viewMap.getView(name), str(name))
             self.viewsTubWidget.setCurrentIndex(self.viewsTubWidget.count()-1)
 

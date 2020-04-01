@@ -9,16 +9,53 @@ import os
 from PyQt5 import QtWidgets, QtCore, QtGui
 from functools import partial
 from plugins.firstGame import gamepaths
+from gui.glib import customwidgets as cust_widg
 
-class VBoxLayout(QtWidgets.QBoxLayout):
-    def __init__(self, direction, parent, **kwargs):
-        super().__init__(direction, parent)
-        self.setDirection(direction)
-        self.setParent(parent)
-        contentMargin = kwargs.get("content_margin", (0, 0, 0, 0))
-        spacing = kwargs.get("spacing", 0)
-        self.setContentsMargins(*contentMargin)
-        self.setSpacing(spacing)
+class ControlPanelScene(QtWidgets.QFrame):
+    def __init__(self, controller):
+        super().__init__()
+        self._controller = controller
+        self.mapPanelControl = MapPanelControl(self._controller)
+        self.btnImageMapPanel = BtnImageMapPanel(self._controller)
+
+        self.basebox = QtWidgets.QVBoxLayout(self)
+        self.splitter = QtWidgets.QSplitter()
+        self.splitter.setHandleWidth(2)
+        self.splitter.setChildrenCollapsible(False)
+        self.basebox.addWidget(self.splitter)
+        self.splitter.addWidget(self.btnImageMapPanel)
+        self.splitter.addWidget(self.mapPanelControl)
+
+
+    def selectedItems(self):
+        return self.btnImageMapPanel.selectedItems()
+
+    def selectedIndexes(self):
+        return self.btnImageMapPanel.selectedIndexes()
+
+    def selectedNames(self):
+        return self.btnImageMapPanel.selectedNames()
+
+    def setLogicModel(self, logic_model):
+        self.logicModel = logic_model
+
+    def userSelectedItems(self):
+        return self.btnImageMapPanel.userSelectedItems()
+
+
+    def selectToNames(self, *names):
+        self.btnImageMapPanel.selectToNames(*names)
+
+    def selectToIndexs(self, *indexs):
+        self.btnImageMapPanel.selectToIndexs(*indexs)
+
+    def updateItems(self):
+        self.btnImageMapPanel.addItems(self.logicModel)
+
+    def _delBtn(self):
+        self.main.toolImagesController.delBtns()
+
+
 
 
 class Dialog(QtWidgets.QInputDialog):
@@ -43,22 +80,16 @@ class ImageMapBtn(QtWidgets.QPushButton):
     def isUserChecked(self):
         return self.userChecked
 
-    # def setChecked(self, bool):
-    #     if bool:
-    #         print("setChecked {}".format(self.name))
-    #     super().setChecked(bool)
 
     def __repr__(self):
         return "ImageMapBtn-{}".format(self.name)
 
-class RightFrame(QtWidgets.QFrame):
+class MapPanelControl(QtWidgets.QFrame):
     def __init__(self, controller):
         super().__init__()
 
         self._controller = controller
-        print(self._controller)
-        self.box = QtWidgets.QVBoxLayout(self)
-        self.box.setContentsMargins(0, 0, 0, 0)
+        self.box = cust_widg.BoxLayout(QtWidgets.QBoxLayout.TopToBottom, self)
         self.up = BtnResize("up")
         self.up.setIcon(QtGui.QIcon(os.path.join(gamepaths.ICONS, "up.png")))
         self.down = BtnResize("down")
@@ -96,63 +127,13 @@ class BtnResize(QtWidgets.QPushButton):
             self.setText(self.name)
             self.setStyleSheet("Text-align:left")
 
-class ToolImagesTub(QtWidgets.QFrame):
-    def __init__(self, controller):
-        super().__init__()
 
-        self._controller = controller
-        self.basebox = QtWidgets.QVBoxLayout(self)
-        self.splitter = QtWidgets.QSplitter()
-
-        self.splitter.setHandleWidth(2)
-        self.splitter.setChildrenCollapsible(False)
-
-        self.basebox.addWidget(self.splitter)
-        self.rightFrame = RightFrame(self._controller)
-        self.leftFrame = BtnImagePanel(self._controller)
-        self.splitter.addWidget(self.leftFrame)
-        self.splitter.addWidget(self.rightFrame)
-
-
-    def selectedItems(self):
-        return self.leftFrame.selectedItems()
-
-    def selectedIndexes(self):
-        return self.leftFrame.selectedIndexes()
-
-    def selectedNames(self):
-        return self.leftFrame.selectedNames()
-
-    def setLogicModel(self, logic_model):
-        self.logicModel = logic_model
-
-    def userSelectedItems(self):
-        return self.leftFrame.userSelectedItems()
-
-
-    def selectToNames(self, *names):
-        self.leftFrame.selectToNames(*names)
-
-    def selectToIndexs(self, *indexs):
-        self.leftFrame.selectToIndexs(*indexs)
-
-    def updateItems(self):
-        self.leftFrame.addItems(self.logicModel)
-
-    def _delBtn(self):
-        self.main.toolImagesController.delBtns()
-
-
-
-
-
-
-class BtnImagePanel(QtWidgets.QFrame):
+class BtnImageMapPanel(QtWidgets.QFrame):
     def __init__(self, controller):
         super().__init__()
         self._controller = controller
         self.setMinimumWidth(70)
-        self.box = VBoxLayout(QtWidgets.QBoxLayout.BottomToTop, self)
+        self.box = cust_widg.BoxLayout(QtWidgets.QBoxLayout.BottomToTop, self)
         self.group = QtWidgets.QButtonGroup()
         self.items = []
 

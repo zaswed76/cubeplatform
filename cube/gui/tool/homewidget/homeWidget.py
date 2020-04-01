@@ -3,7 +3,7 @@
 
 import sys
 from PyQt5 import QtWidgets
-from gui.glib.widgets import *
+from gui.glib.customwidgets import *
 from gui.tool.homewidget import appWidget
 
 
@@ -22,8 +22,8 @@ class HomeWidget(QtWidgets.QFrame):
 
         self.base_main = parent
         self.setObjectName("homeWidget")
-        self.box = VBoxLayout(QtWidgets.QBoxLayout.TopToBottom,
-                              self, spacing=1)
+        self.box = BoxLayout(QtWidgets.QBoxLayout.TopToBottom,
+                             self, spacing=1)
         self.bottom_box = QtWidgets.QHBoxLayout()
         self.top_box = QtWidgets.QHBoxLayout()
         self.setToolTip("Home")

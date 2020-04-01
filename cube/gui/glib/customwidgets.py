@@ -5,16 +5,16 @@ from PyQt5 import QtWidgets, QtCore
 
 
 
-class HBoxLayout(QtWidgets.QHBoxLayout):
-    def __init__(self, parent, **args):
-        super().__init__()
-        self.setParent(parent)
-        contentMargin = args.get("content_margin", (0, 0, 0, 0))
-        spacing = args.get("spacing", 0)
-        self.setContentsMargins(*contentMargin)
-        self.setSpacing(spacing)
+# class HBoxLayout(QtWidgets.QHBoxLayout):
+#     def __init__(self, parent, **args):
+#         super().__init__()
+#         self.setParent(parent)
+#         contentMargin = args.get("content_margin", (0, 0, 0, 0))
+#         spacing = args.get("spacing", 0)
+#         self.setContentsMargins(*contentMargin)
+#         self.setSpacing(spacing)
 
-class VBoxLayout(QtWidgets.QBoxLayout):
+class BoxLayout(QtWidgets.QBoxLayout):
     def __init__(self, direction, parent, **kwargs):
         super().__init__(direction, parent)
         self.setDirection(direction)
@@ -28,7 +28,7 @@ class Widget(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         self.resize(500, 500)
-        self.box = VBoxLayout(QtWidgets.QBoxLayout.BottomToTop, self)
+        self.box = BoxLayout(QtWidgets.QBoxLayout.BottomToTop, self)
         self.box.addWidget(QtWidgets.QPushButton("1"))
         self.box.addWidget(QtWidgets.QPushButton("2"))
         self.box.addWidget(QtWidgets.QPushButton("3"))

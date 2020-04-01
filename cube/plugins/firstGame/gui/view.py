@@ -89,7 +89,10 @@ class Scene(QtWidgets.QGraphicsScene):
     #
     # def mouseReleaseEvent(self, QGraphicsSceneMouseEvent):
     #     print("####")
-
+    #
+    # def selectionChanged(self):
+    #     print('selectionChanged')
+    #     super().selectionChanged()
 
 
 class View(QtWidgets.QGraphicsView):

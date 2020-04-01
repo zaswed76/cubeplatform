@@ -121,8 +121,11 @@ class ToolImagesTub(QtWidgets.QFrame):
         return self.leftFrame.userSelectedItems()
 
 
-    def selectToIndex(self, *indexs):
-        self.leftFrame.selectToIndex(*indexs)
+    def selectToNames(self, *names):
+        self.leftFrame.selectToNames(*names)
+
+    def selectToIndexs(self, *indexs):
+        self.leftFrame.selectToIndexs(*indexs)
 
     def updateItems(self):
         self.leftFrame.addItems(self.logicModel)
@@ -170,7 +173,13 @@ class BtnImagePanel(QtWidgets.QFrame):
         btn.userChecked = not btn.userChecked
         self.main.imgBtnCheck()
 
-    def selectToIndex(self, *indexs):
+    def selectToNames(self, *names):
+        self.clearSelecteted()
+        for i, e in enumerate(self.group.buttons()):
+            if e.name in names:
+                e.setChecked(True)
+
+    def selectToIndexs(self, *indexs):
         self.clearSelecteted()
         for i, e in enumerate(self.group.buttons()):
             if i in indexs:

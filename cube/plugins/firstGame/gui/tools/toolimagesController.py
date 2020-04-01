@@ -18,7 +18,6 @@ class ToolImagesController():
         self.main.returnGeometry()
 
     def addTen(self, ten):
-        print("addten")
         ten = self.main.tools.bottomAddPanel.showDialog()
         if ten is not None and not self.main.viewList.isName(ten):
             self.main.initScene(ten)
@@ -44,7 +43,7 @@ class ToolImagesController():
         new_index = logic_model.down(index)
         if new_index is not None:
             self.tool_widget.toolImagees.updateItems()
-            self.tool_widget.toolImagees.selectToIndex(new_index)
+            self.tool_widget.toolImagees.selectToIndexs(new_index)
             self.main.currentScene.updateItems()
 
 
@@ -57,7 +56,7 @@ class ToolImagesController():
         new_index = logic_model.up(index)
         if new_index is not None:
             self.tool_widget.toolImagees.updateItems()
-            self.tool_widget.toolImagees.selectToIndex(new_index)
+            self.tool_widget.toolImagees.selectToIndexs(new_index)
             self.main.currentScene.updateItems()
 
     def changedViewTub(self, i):

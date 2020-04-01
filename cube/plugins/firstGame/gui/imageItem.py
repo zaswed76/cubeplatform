@@ -102,9 +102,10 @@ class GraphicsImage(QtWidgets.QGraphicsPixmapItem):
         self.setPos(x, y)
 
 
-    def mouseReleaseEvent(self, *args, **kwargs):
-        super().mouseReleaseEvent(*args, **kwargs)
-        self.main.imagePixmapCheck()
+    # def mouseReleaseEvent(self, *args, **kwargs):
+    #     super().mouseReleaseEvent(*args, **kwargs)
+    #     self.main.imagePixmapCheck()
+
 
 
 

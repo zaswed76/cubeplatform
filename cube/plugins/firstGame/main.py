@@ -150,10 +150,10 @@ class Main(AbcQFrame):
     def initScene(self, name):
         counttubs = self.viewsTubWidget.count()
         if counttubs == 1 and self.viewsTubWidget.tabText(0) == "None":
-            print("bbbbbbbbbbbbbbbbbbb")
             logicModel = seqImage.Sequence()
             self.tools.toolImagees.setLogicModel(logicModel)
             scene = Scene(self.sceneRect, GraphicsImage, self.resource_path, ".png", self.itemsGeometry,  parent=self)
+            scene.selectionChanged.connect(self.selection_changed)
             scene.setLogicModel(logicModel)
             view = View(self.cfg["viewSize"])
             view.setScene(scene)
@@ -164,6 +164,7 @@ class Main(AbcQFrame):
             logicModel = seqImage.Sequence()
             self.tools.toolImagees.setLogicModel(logicModel)
             scene = Scene(self.sceneRect, GraphicsImage, self.resource_path, ".png", self.itemsGeometry,  parent=self)
+            scene.selectionChanged.connect(self.selection_changed)
             scene.setLogicModel(logicModel)
             view = View(self.cfg["viewSize"])
             view.setScene(scene)
@@ -173,7 +174,9 @@ class Main(AbcQFrame):
             self.viewsTubWidget.setCurrentIndex(self.viewsTubWidget.count()-1)
 
 
-
+    def selection_changed(self):
+        names = [x.name for x in self.currentScene.selectedItems()]
+        self.tools.toolImagees.selectToNames(*names)
 
     def saveGeometry(self):
         for i in self.currentScene.getItemsGeometry():
@@ -196,10 +199,8 @@ class Main(AbcQFrame):
 
 
     def imagePixmapCheck(self):
-        pass
-        # selected = [int(x.name) for x in self.scene.selectedItems()]
-        # print(selected)
-        # # self.tools.toolImagees.selectToIndex(*selected)
+        selected = [x.name for x in self.currentScene.selectedItems()]
+        self.tools.toolImagees.selectToNames(*selected)
 
 if __name__ == '__main__':
 

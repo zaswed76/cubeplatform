@@ -14,7 +14,7 @@ class Config(MutableMapping):
 
     def save(self):
         with open(self.cfg_pth, 'w') as f:
-            yaml.dump(self._data, f)
+            yaml.dump(self._data, f, indent=4, default_flow_style=False, canonical=False)
 
     @property
     def data(self):

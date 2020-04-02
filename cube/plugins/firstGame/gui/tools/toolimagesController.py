@@ -48,6 +48,9 @@ class ToolImagesController():
         self.tool_widget.toolImagees.updateItems()
         self.main.scene.updateItems()
 
+    def sdownImageBtn(self):
+        print("sdownImageBtn")
+
     def downImageBtn(self):
         sel_lst = self.tool_widget.toolImagees.selectedIndexes()
         if len(sel_lst) > 1 or not sel_lst:
@@ -60,6 +63,8 @@ class ToolImagesController():
             self.main.currentScene.updateItems()
             self.tool_widget.toolImagees.selectToIndexs(new_index)
 
+    def supImageBtn(self):
+        print("supImageBtn")
 
     def upImageBtn(self):
         sel_lst = self.tool_widget.toolImagees.selectedIndexes()

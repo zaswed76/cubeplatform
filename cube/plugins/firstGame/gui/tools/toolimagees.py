@@ -90,21 +90,28 @@ class MapPanelControl(QtWidgets.QFrame):
 
         self._controller = controller
         self.box = cust_widg.BoxLayout(QtWidgets.QBoxLayout.TopToBottom, self)
-        self.up = BtnResize("up")
-        self.up.setIcon(QtGui.QIcon(os.path.join(gamepaths.ICONS, "up.png")))
-        self.down = BtnResize("down")
-        self.down.setIcon(QtGui.QIcon(os.path.join(gamepaths.ICONS, "down.png")))
+        self.up = self.controll("up")
+        self.down = self.controll("down")
+        self.sup = self.controll("sup")
+        self.sdown = self.controll("sdown")
 
         self.up.clicked.connect(self._controller.upImageBtn)
         self.down.clicked.connect(self._controller.downImageBtn)
-        self.addWidget(self.up)
-        self.addWidget(self.down)
-        self.addStretch(5)
+        self.sup.clicked.connect(self._controller.supImageBtn)
+        self.sdown.clicked.connect(self._controller.sdownImageBtn)
 
-    def addWidget(self, widget):
-        self.box.addWidget(widget)
-    def addStretch(self, s):
-        self.box.addStretch(s)
+        self.box.addWidget(self.sup)
+        self.box.addWidget(self.up)
+        self.box.addWidget(self.down)
+        self.box.addWidget(self.sdown)
+        self.box.addStretch(5)
+
+    def controll(self, name):
+        up = BtnResize(name)
+        up.setIcon(QtGui.QIcon(os.path.join(gamepaths.ICONS, "{}.png".format(name))))
+        return up
+
+
 
 
 
@@ -113,10 +120,11 @@ class BtnResize(QtWidgets.QPushButton):
         super().__init__(*__args)
         self.name = name
         self.setText(self.name)
+
         self.setMinimumWidth(30)
         self.setMaximumWidth(80)
         self.setStyleSheet("Text-align:left")
-
+        self.setIconSize(QtCore.QSize(18, 18))
     def resizeEvent(self, e):
         w = e.size().width()
         if w < 50:

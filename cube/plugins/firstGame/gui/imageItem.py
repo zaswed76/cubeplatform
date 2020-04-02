@@ -6,21 +6,21 @@ from pathlib import Path
 
 
 class GraphicsImage(QtWidgets.QGraphicsPixmapItem):
-    def __init__(self, scene, name, itemsGeometry, imgdir, ext, main=None):
+    def __init__(self, scene, name, itemsGeometry, imgdir, ext, main=None, imgpath=None):
         super().__init__()
 
+        self.imgpath = imgpath
         self.main = main
         self.scene = scene
         self.name = name
         self.itemsGeometry = itemsGeometry
-
-
-
-
         self.ext = ext
         self.imgdir = imgdir
 
-        self._pixmap = QtGui.QPixmap(self.path)
+        if self.imgpath is None:
+            self._pixmap = QtGui.QPixmap(self.path)
+        else:
+            self._pixmap = QtGui.QPixmap(self.imgpath)
         self.image_size = self._pixmap.size().width()
         self.setPixmap(self._pixmap)
         self.setTransformationMode(
@@ -40,6 +40,7 @@ class GraphicsImage(QtWidgets.QGraphicsPixmapItem):
 
     @property
     def path(self):
+        # print(self.name, type(self.name), "name image")
         if self.imgdir is not None:
             name = self.name + self.ext
             return str(Path(self.imgdir) / name)

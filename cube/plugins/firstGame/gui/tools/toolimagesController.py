@@ -35,6 +35,12 @@ class ToolImagesController():
         files, _ = QtWidgets.QFileDialog.getOpenFileNames(None, directory=gamepaths.GAME_RESOURCES)
         if files:
             self.main.initViewFiles(files)
+            self.main.viewMap.getScene("new_tub").clear()
+            self.main.viewMap.getLogicModel("new_tub").addFiles(files)
+
+            self.main.viewMap.getScene("new_tub").updateItems()
+            self.main.viewMap.getScene("new_tub").name = "new_tub"
+            self.main.tools.controlPanelScene.updateItems()
 
     def addTen(self, ten):
         ten = self.main.tools.bottomAddPanel.showDialog()
@@ -43,10 +49,11 @@ class ToolImagesController():
             self.main.initView(line_ten)
             self.main.viewMap.getScene(line_ten).clear()
             tenlst = self.main.itemsGeometry.get("tens", {}).get(line_ten, ten)
+            # print(tenlst, "tenlst")
             self.main.viewMap.getLogicModel(line_ten).setTen(tenlst)
             self.main.viewMap.getScene(line_ten).updateItems()
             self.main.viewMap.getScene(line_ten).name = line_ten
-            self.main.tools.toolImagees.updateItems()
+            self.main.tools.controlPanelScene.updateItems()
 
     def delBtns(self):
         items = self.tool_widget.toolImagees.selectedNames()
@@ -58,31 +65,31 @@ class ToolImagesController():
         print("sdownImageBtn")
 
     def downImageBtn(self):
-        sel_lst = self.tool_widget.toolImagees.selectedIndexes()
+        sel_lst = self.tool_widget.controlPanelScene.selectedIndexes()
         if len(sel_lst) > 1 or not sel_lst:
             return
         index = sel_lst[0]
         logic_model = self.main.currentLogicModel
         new_index = logic_model.down(index)
         if new_index is not None:
-            self.tool_widget.toolImagees.updateItems()
+            self.tool_widget.controlPanelScene.updateItems()
             self.main.currentScene.updateItems()
-            self.tool_widget.toolImagees.selectToIndexs(new_index)
+            self.tool_widget.controlPanelScene.selectToIndexs(new_index)
 
     def supImageBtn(self):
         print("supImageBtn")
 
     def upImageBtn(self):
-        sel_lst = self.tool_widget.toolImagees.selectedIndexes()
+        sel_lst = self.tool_widget.controlPanelScene.selectedIndexes()
         if len(sel_lst) > 1 or not sel_lst:
             return
         index = sel_lst[0]
         logic_model = self.main.currentLogicModel
         new_index = logic_model.up(index)
         if new_index is not None:
-            self.tool_widget.toolImagees.updateItems()
+            self.tool_widget.controlPanelScene.updateItems()
             self.main.currentScene.updateItems()
-            self.tool_widget.toolImagees.selectToIndexs(new_index)
+            self.tool_widget.controlPanelScene.selectToIndexs(new_index)
 
     def closeTabView(self, i):
         # todo надо доделать
@@ -96,8 +103,8 @@ class ToolImagesController():
         if name != "None":
             if name:
                 logic_model = self.main.viewMap.getLogicModel(name)
-                self.tool_widget.toolImagees.setLogicModel(logic_model)
-                self.tool_widget.toolImagees.updateItems()
+                self.tool_widget.controlPanelScene.setLogicModel(logic_model)
+                self.tool_widget.controlPanelScene.updateItems()
 
                 self.main.currentSceneName = name
 

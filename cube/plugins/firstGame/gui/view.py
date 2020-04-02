@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 import sys
-from PyQt5 import QtWidgets, QtCore, QtGui
 
+from PyQt5 import QtWidgets, QtCore
+from plugins.firstGame.core import seqImage
 
 
 class Scene(QtWidgets.QGraphicsScene):
@@ -36,15 +37,27 @@ class Scene(QtWidgets.QGraphicsScene):
         }
         self.keyMap["ctrl"] = control
 
-
     def setLogicModel(self, logic_model):
         self.logicModel = logic_model
+        # print(type(self.logicModel), "type")
 
     def updateItems(self):
+
         self.clear()
-        for name in self.logicModel:
-            item = self.GraphicsImage(self, name, self.itemsGeometry.get(name, {}), self.imgdir, self.ext, main=self.main)
-            self.addItem(item)
+        if isinstance(self.logicModel, seqImage.Sequence):
+            print("seqImage.Sequence")
+            for name in self.logicModel:
+                    item = self.GraphicsImage(self, name, self.itemsGeometry.get(name, {}),
+                                          self.imgdir, self.ext, main=self.main)
+                    self.addItem(item)
+        elif isinstance(self.logicModel, seqImage.SequenceFiles):
+            for path in self.logicModel:
+                    item = self.GraphicsImage(self, "", self.itemsGeometry.get("#", {}),
+                                          self.imgdir, self.ext, main=self.main, imgpath=path)
+                    self.addItem(item)
+        else:
+            print("????????????")
+
 
     def scaledtems(self, delta: float):
         for i in self.selectedItems():
@@ -66,15 +79,14 @@ class Scene(QtWidgets.QGraphicsScene):
             self.rotateItems(delta)
 
     def keyPressEvent(self, e):
-       if (e.modifiers() & QtCore.Qt.ControlModifier):
-           k = self.keyMap["ctrl"].get(e.key())
-           if k is not None:
-               getattr(self, k[0])(k[1])
+        if (e.modifiers() & QtCore.Qt.ControlModifier):
+            k = self.keyMap["ctrl"].get(e.key())
+            if k is not None:
+                getattr(self, k[0])(k[1])
 
     def setAllSelected(self, select):
         for i in self.items():
             i.setSelected(select)
-
 
     def getItemsGeometry(self):
         return [x for x in self.items()]
@@ -102,15 +114,15 @@ class Scene(QtWidgets.QGraphicsScene):
     def __repr__(self):
         return "Scene-{}".format(self.name)
 
+
 class View(QtWidgets.QGraphicsView):
     def __init__(self, size, name=None):
         super().__init__()
         self.name = name
         self.setObjectName("firstGame_View")
         width, height = size
-        self.setFixedSize(width+4, height+4)
+        self.setFixedSize(width + 4, height + 4)
         self.setDragMode(QtWidgets.QGraphicsView.RubberBandDrag)
-
 
     def __repr__(self):
         return "View - {}".format(self.scene())

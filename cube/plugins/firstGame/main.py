@@ -171,7 +171,7 @@ class Main(AbcQFrame):
 
     def _setViewToViewMap(self, name):
             logicModel = seqImage.Sequence()
-            self.tools.toolImagees.setLogicModel(logicModel)
+            self.tools.controlPanelScene.setLogicModel(logicModel)
             scene = Scene(self.sceneRect, GraphicsImage, self.resource_path, ".png", self.itemsGeometry,  parent=self)
             scene.selectionChanged.connect(self.selectionSceneChange)
             scene.setLogicModel(logicModel)
@@ -197,12 +197,11 @@ class Main(AbcQFrame):
         scene = self.currentScene
         if scene is not None:
             names = [x.name for x in self.currentScene.selectedItems()]
-            print(names, [type(x) for x in names], "555")
-            self.tools.toolImagees.selectToNames(*names)
+            self.tools.controlPanelScene.selectToNames(*names)
 
     def initViewFiles(self, files):
-        logicModel = seqImage.SequenceFiles(files)
-        self.tools.toolImagees.setLogicModel(logicModel)
+        logicModel = seqImage.SequenceFiles()
+        self.tools.controlPanelScene.setLogicModel(logicModel)
         scene = Scene(self.sceneRect, GraphicsImage, self.resource_path, ".png", self.itemsGeometry,  parent=self)
         scene.selectionChanged.connect(self.selectionSceneChange)
         scene.setLogicModel(logicModel)
@@ -210,9 +209,8 @@ class Main(AbcQFrame):
         view.setScene(scene)
         self.viewMap.addScene("new_tub", view, scene, logicModel)
         self.viewsTubWidget.addTab(self.viewMap.getView("new_tub"), str("new_tub"))
-        # self.viewsTubWidget.setCurrentIndex(self.viewsTubWidget.count()-1)
-        #
-        # print(logicModel)
+        self.viewsTubWidget.setCurrentIndex(self.viewsTubWidget.count()-1)
+
 
 if __name__ == '__main__':
 

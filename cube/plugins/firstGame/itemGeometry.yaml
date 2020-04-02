@@ -1,3 +1,9 @@
+? ''
+: pos:
+  - -804.0
+  - -805.0
+  rotate_mod: 0.0
+  scaled: 0.11199999999999938
 '0':
   pos:
   - -64.0
@@ -209,3 +215,5 @@ tens:
   - '7'
   - '8'
   - '9'
+  new_tub:
+  - D:/download/swan_PNG51.png

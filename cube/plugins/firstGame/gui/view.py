@@ -20,7 +20,7 @@ class Scene(QtWidgets.QGraphicsScene):
         """
         super().__init__(*__args)
         self.main = parent
-        self.name = None
+        # self.name = None
         self.itemsGeometry = itemsGeometry
         x, y, width, height = rect
         self.ext = ext

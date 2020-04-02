@@ -6,10 +6,11 @@ class Sequence(MutableSequence):
     def __init__(self):
         self._lst = []
 
-    def setTen(self, ten, step=1):
+    def setTen(self, ten: str or list, step=1):
         self._lst.clear()
-        if isinstance(ten, int):
-            self._lst.extend([str(x)for x in range(ten, ten+10, step)])
+        if isinstance(ten, str):
+            iten = int(ten)
+            self._lst.extend([str(x)for x in range(iten, iten+10, step)])
         elif isinstance(ten, list):
             self._lst.extend(ten)
 
@@ -26,9 +27,6 @@ class Sequence(MutableSequence):
     @property
     def data(self):
         return self._lst
-
-
-
 
     def __setitem__(self, index, value):
         self._lst[index] = value
@@ -71,15 +69,27 @@ class Sequence(MutableSequence):
             return None
 
     def __repr__(self):
-        return "{self.start} - {self.end}; step - {self.step}"
+        return str(self._lst)
+
+
+class SequenceFiles(Sequence):
+    def __init__(self, *files):
+        super().__init__()
+        self._lst.extend(files)
+
+    def addFiles(self, files):
+        self._lst.extend(files)
+
+    def __repr__(self):
+        return str(self._lst)
 
 if __name__ == '__main__':
 
-    imgseq = Sequence()
-    imgseq.setTen(0)
-    # imgseq.reverse()
+    imgseq = SequenceFiles()
+    print(imgseq)
+    imgseq.addFiles(["file1", "file2"])
+    print(imgseq)
     imgseq.up(0)
-
     for i in imgseq:
         print(i)
 

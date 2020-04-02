@@ -50,6 +50,7 @@ class ControlPanelScene(QtWidgets.QFrame):
         self.btnImageMapPanel.selectToIndexs(*indexs)
 
     def updateItems(self):
+        print(self.logicModel)
         self.btnImageMapPanel.addItems(self.logicModel)
 
     def _delBtn(self):
@@ -160,8 +161,8 @@ class BtnImageMapPanel(QtWidgets.QFrame):
         self.group.setExclusive(False)
         self.box.addStretch(5)
         for index, name in enumerate(items):
+            print(name, "NNNNNNNNNNNN")
             btn = ImageMapBtn(name, index)
-            # btn.toggled.connect(self.imgBtnCheck)
             self.box.addWidget(btn)
             self.group.addButton(btn)
 

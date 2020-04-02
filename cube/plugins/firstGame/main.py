@@ -150,7 +150,7 @@ class Main(AbcQFrame):
     def currentSceneName(self):
         if self._currentSceneName is None: return None
         else:
-            return int(self._currentSceneName)
+            return self._currentSceneName
 
     @currentSceneName.setter
     def currentSceneName(self, name):
@@ -197,9 +197,22 @@ class Main(AbcQFrame):
         scene = self.currentScene
         if scene is not None:
             names = [x.name for x in self.currentScene.selectedItems()]
+            print(names, [type(x) for x in names], "555")
             self.tools.toolImagees.selectToNames(*names)
 
-
+    def initViewFiles(self, files):
+        logicModel = seqImage.SequenceFiles(files)
+        self.tools.toolImagees.setLogicModel(logicModel)
+        scene = Scene(self.sceneRect, GraphicsImage, self.resource_path, ".png", self.itemsGeometry,  parent=self)
+        scene.selectionChanged.connect(self.selectionSceneChange)
+        scene.setLogicModel(logicModel)
+        view = View(self.cfg["viewSize"], "new_tub")
+        view.setScene(scene)
+        self.viewMap.addScene("new_tub", view, scene, logicModel)
+        self.viewsTubWidget.addTab(self.viewMap.getView("new_tub"), str("new_tub"))
+        # self.viewsTubWidget.setCurrentIndex(self.viewsTubWidget.count()-1)
+        #
+        # print(logicModel)
 
 if __name__ == '__main__':
 

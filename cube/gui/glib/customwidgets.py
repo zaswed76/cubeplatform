@@ -5,14 +5,19 @@ from PyQt5 import QtWidgets, QtCore
 
 
 
-# class HBoxLayout(QtWidgets.QHBoxLayout):
-#     def __init__(self, parent, **args):
-#         super().__init__()
-#         self.setParent(parent)
-#         contentMargin = args.get("content_margin", (0, 0, 0, 0))
-#         spacing = args.get("spacing", 0)
-#         self.setContentsMargins(*contentMargin)
-#         self.setSpacing(spacing)
+#!/usr/bin/env python3
+
+import sys
+from PyQt5 import QtWidgets, QtCore
+
+
+
+class ToolTypeFrame(QtWidgets.QFrame):
+    def __init__(self, name, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.setObjectName(name)
+        self.setToolTip("{}".format(self.__class__))
+
 
 class BoxLayout(QtWidgets.QBoxLayout):
     def __init__(self, direction, parent, **kwargs):

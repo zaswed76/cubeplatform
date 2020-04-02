@@ -3,6 +3,8 @@
 import sys
 from PyQt5 import QtWidgets, QtCore
 from plugins.firstGame.gui.tools import toolimagees
+from gui.glib import customwidgets
+# from plugins.firstGame import gamepaths
 
 class Dialog(QtWidgets.QInputDialog):
     def __init__(self):
@@ -22,11 +24,10 @@ class BottomBtn(QtWidgets.QPushButton):
         self.setFixedSize(18, 18)
 
 
-class BottomAddPanel(QtWidgets.QFrame):
-    def __init__(self, controller):
-        super().__init__()
-
-        self.controller = controller
+class BottomAddPanel(customwidgets.ToolTypeFrame):
+    def __init__(self, name, controller, *args, **kwargs):
+        super().__init__(name, *args, **kwargs)
+        self._controller = controller
         self.setFixedHeight(25)
         self.setStyleSheet("background-color: #E1E1E1")
         self.hbox = QtWidgets.QHBoxLayout(self)
@@ -36,7 +37,8 @@ class BottomAddPanel(QtWidgets.QFrame):
         self.delBtn = BottomBtn("firstGame_delBtn")
         self.addFilesBtn = BottomBtn("firstGame_addFilesBtn")
         self.addTenBtn = BottomBtn("firstGame_addTenBtn")
-        self.addTenBtn.clicked.connect(self.controller.addTen)
+        self.addFilesBtn.clicked.connect(self._controller.addFiles)
+        self.addTenBtn.clicked.connect(self._controller.addTen)
         self.hbox.addStretch(5)
         self.hbox.addWidget(self.addFilesBtn)
         self.hbox.addWidget(self.addTenBtn)
@@ -46,7 +48,7 @@ class BottomAddPanel(QtWidgets.QFrame):
         d = Dialog()
         i, ok = d.getInt(self, "a", "b", 0, 0, 90, 10)
         if ok:
-            return i
+            return str(i)
         else: return None
 
 class RightFrame(QtWidgets.QFrame):
@@ -87,7 +89,7 @@ class Tools(QtWidgets.QFrame):
         self.box.insertWidget(2, self.tub)
 
     def initBottomPanel(self):
-        self.bottomAddPanel = BottomAddPanel(self._controller)
+        self.bottomAddPanel = BottomAddPanel("bottomAddPanel", self._controller)
         self.box.insertWidget(3, self.bottomAddPanel)
 
     def initSaveReturnBtns(self):

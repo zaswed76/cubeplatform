@@ -49,7 +49,8 @@ class BottomAddPanel(customwidgets.ToolTypeFrame):
         i, ok = d.getInt(self, "a", "b", 0, 0, 90, 10)
         if ok:
             return str(i)
-        else: return None
+        else:
+            return None
 
 class RightFrame(QtWidgets.QFrame):
     def __init__(self, *args, **kwargs):
@@ -63,8 +64,8 @@ class RightFrame(QtWidgets.QFrame):
 
 
 
-class Tools(QtWidgets.QFrame):
-    def __init__(self, parent,  *args, **kwargs):
+class ToolsImageFrame(customwidgets.ToolTypeFrame):
+    def __init__(self, name, parent,  *args, **kwargs):
 
         """
 
@@ -72,9 +73,8 @@ class Tools(QtWidgets.QFrame):
         :param args:
         :param kwargs:
         """
-        super().__init__(parent, *args, **kwargs)
+        super().__init__(name, parent, *args, **kwargs)
         self.main = parent
-        self.setObjectName("firstGame_tools")
         self._controller = None
         self.box = QtWidgets.QVBoxLayout(self)
         self.box.setContentsMargins(0, 0, 0, 0)
@@ -111,6 +111,6 @@ class Tools(QtWidgets.QFrame):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     # app.setStyleSheet(open('./etc/{0}.qss'.format('style'), "r").read())
-    main = Tools()
+    main = ToolsImageFrame()
     main.show()
     sys.exit(app.exec_())

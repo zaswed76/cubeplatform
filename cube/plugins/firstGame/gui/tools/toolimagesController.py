@@ -24,26 +24,44 @@ class ToolImagesController():
     def returnGeometry(self):
         print("returnGeometry")
 
-    # def saveBtn(self):
-    #     self.main.saveGeometry()
+    def dialogAddorNew(self):
+        mb = QtWidgets.QMessageBox()
+        mb.setWindowTitle("Выбрать вкладку")
+        mb.setText("Открыть в новой или добавить в текущую?")
+        # mb.setDetailedText("text")
+        button_new = mb.addButton("в новой", QtWidgets.QMessageBox.AcceptRole)
+        button_to = mb.addButton("добавить", QtWidgets.QMessageBox.AcceptRole)
+        button_cancel = mb.addButton("Отклонить", QtWidgets.QMessageBox.RejectRole)
+        mb.exec()
+        if mb.clickedButton() == button_to:
+            return "to"
+        elif mb.clickedButton() == button_new:
+            return "new"
+        else:
+            print('Пользователь отказался от обновления...')
+            return
 
     def returnBtn(self):
         self.main.returnGeometry()
 
     def addFiles(self):
-        print("addFiles")
         files, _ = QtWidgets.QFileDialog.getOpenFileNames(None, directory=gamepaths.GAME_RESOURCES)
         if files:
-            self.main.initViewFiles(files)
-            self.main.viewMap.getScene("new_tub").clear()
-            self.main.viewMap.getLogicModel("new_tub").addFiles(files)
-
-            self.main.viewMap.getScene("new_tub").updateItems()
-            self.main.viewMap.getScene("new_tub").name = "new_tub"
-            self.main.tools.controlPanelScene.updateItems()
+            res = self.dialogAddorNew()
+            if res == "new":
+                self.main.initViewFiles(files)
+                self.main.viewMap.getScene("new_tub").clear()
+                self.main.viewMap.getLogicModel("new_tub").addFiles(files)
+                self.main.viewMap.getScene("new_tub").updateItems()
+                self.main.viewMap.getScene("new_tub").name = "new_tub"
+                self.main.toolsImageFrame.controlPanelScene.updateItems()
+            elif res == "to":
+                print("to")
+            else:
+                print("no")
 
     def addTen(self, ten):
-        ten = self.main.tools.bottomAddPanel.showDialog()
+        ten = self.main.toolsImageFrame.bottomAddPanel.showDialog()
         line_ten = str(ten)
         if ten is not None and not self.main.viewMap.isName(line_ten):
             self.main.initView(line_ten)
@@ -53,7 +71,7 @@ class ToolImagesController():
             self.main.viewMap.getLogicModel(line_ten).setTen(tenlst)
             self.main.viewMap.getScene(line_ten).updateItems()
             self.main.viewMap.getScene(line_ten).name = line_ten
-            self.main.tools.controlPanelScene.updateItems()
+            self.main.toolsImageFrame.controlPanelScene.updateItems()
 
     def delBtns(self):
         items = self.tool_widget.toolImagees.selectedNames()

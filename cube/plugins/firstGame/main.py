@@ -7,7 +7,7 @@ import config
 from plugins.abcPlugin import AbcQFrame
 from plugins.firstGame.gui.view import View, Scene
 from plugins.firstGame.gui.imageItem import GraphicsImage
-from plugins.firstGame.gui.tools import (tools, toolimagesController,
+from plugins.firstGame.gui.tools import (toolsimageframe, toolimagesController,
                                          leftFrame, topFrame, bottomFrame)
 from plugins.firstGame.core import seqImage
 
@@ -106,7 +106,7 @@ class Main(AbcQFrame):
         self.resource_path = paths.get_res_folder("cubeSerg", "images")
 
         self.viewMap = ViewMap()
-        self.initTools()
+        self.initImageMapTools()
         self.initViewsTubWidget()
         self.initView(self.currentSceneName)
 
@@ -125,20 +125,23 @@ class Main(AbcQFrame):
         self.hbox_2.setContentsMargins(0, 0, 0, 0,)
         self.hbox_2.setSpacing(30)
         self.leftFrame = leftFrame.LeftFrame()
-        self.rightFrame = tools.RightFrame()
-        self.rightFrame.addWidget(self.tools)
+        self.rightFrame = toolsimageframe.RightFrame()
+        self.rightFrame.addWidget(self.toolsImageFrame)
         self.rightFrame.addStretch(100)
         self.hbox_2.addWidget(self.leftFrame)
         self.hbox_2.addWidget(self.viewsTubWidget)
         self.hbox_2.addWidget(self.rightFrame)
 
-    def initTools(self):
-        self.tools = tools.Tools(parent=self)
-        self.toolImagesController = toolimagesController.ToolImagesController(self, self.tools)
-        self.tools.setController(self.toolImagesController)
-        self.tools.initTubWidget()
-        self.tools.initSaveReturnBtns()
-        self.tools.initBottomPanel()
+    def initSceneControls(self):
+        pass
+
+    def initImageMapTools(self):
+        self.toolsImageFrame = toolsimageframe.ToolsImageFrame("toolsImageFrame", parent=self)
+        self.toolImagesController = toolimagesController.ToolImagesController(self, self.toolsImageFrame)
+        self.toolsImageFrame.setController(self.toolImagesController)
+        self.toolsImageFrame.initTubWidget()
+        self.toolsImageFrame.initSaveReturnBtns()
+        self.toolsImageFrame.initBottomPanel()
 
     def initViewsTubWidget(self):
         self.viewsTubWidget = TabWidgetScenes()
@@ -171,7 +174,7 @@ class Main(AbcQFrame):
 
     def _setViewToViewMap(self, name):
             logicModel = seqImage.Sequence()
-            self.tools.controlPanelScene.setLogicModel(logicModel)
+            self.toolsImageFrame.controlPanelScene.setLogicModel(logicModel)
             scene = Scene(self.sceneRect, GraphicsImage, self.resource_path, ".png", self.itemsGeometry,  parent=self)
             scene.selectionChanged.connect(self.selectionSceneChange)
             scene.setLogicModel(logicModel)
@@ -197,11 +200,11 @@ class Main(AbcQFrame):
         scene = self.currentScene
         if scene is not None:
             names = [x.name for x in self.currentScene.selectedItems()]
-            self.tools.controlPanelScene.selectToNames(*names)
+            self.toolsImageFrame.controlPanelScene.selectToNames(*names)
 
     def initViewFiles(self, files):
         logicModel = seqImage.SequenceFiles()
-        self.tools.controlPanelScene.setLogicModel(logicModel)
+        self.toolsImageFrame.controlPanelScene.setLogicModel(logicModel)
         scene = Scene(self.sceneRect, GraphicsImage, self.resource_path, ".png", self.itemsGeometry,  parent=self)
         scene.selectionChanged.connect(self.selectionSceneChange)
         scene.setLogicModel(logicModel)

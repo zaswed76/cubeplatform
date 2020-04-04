@@ -15,7 +15,7 @@ from PyQt5 import QtWidgets, QtCore
 class ToolTypeFrame(QtWidgets.QFrame):
     def __init__(self, name, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.setObjectName(name)
+        self.setObjectName("firstGame_{}".format(name))
         self.setToolTip("{}".format(self.__class__))
 
 
